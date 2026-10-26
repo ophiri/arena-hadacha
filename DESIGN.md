@@ -2,7 +2,7 @@
 
 ## Direction
 
-`זירת ההדחה` is a fictional fight-night broadcast rendered as a complete arcade game shell. It rejects the previous website-like card and footer structure: the interface is now a sequence of full-screen game states—main menu, character select, fight, pause, and result.
+`ברואליציה` is a fictional fight-night broadcast rendered as a complete arcade game shell. It rejects the previous website-like card and footer structure: the interface is now a sequence of full-screen game states—main menu, character select, fight, pause, and result.
 
 The memorable image is four oversized fighter cutouts standing on a hazard-striped broadcast platform while the title and mode menu own the opposite half of the screen.
 

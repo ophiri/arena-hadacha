@@ -317,7 +317,7 @@ function updateCharacterUI() {
   }
   canvas.setAttribute(
     "aria-label",
-    `זירת ההדחה. ${game.fighters[0].name} מול ${game.fighters[1].name}. ` +
+    `ברואליציה. ${game.fighters[0].name} מול ${game.fighters[1].name}. ` +
     (session.touchEnabled
       ? "כפתורי המגע שולטים בתנועה, קפיצה כפולה, מכה ומכת טעינה."
       : "A ו-D לתנועה, W לקפיצה כפולה, F למכה, G למכת טעינה."),

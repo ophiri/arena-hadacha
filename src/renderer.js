@@ -237,7 +237,7 @@ export class Renderer {
     c.textAlign = "center";
     c.fillStyle = COLORS.paper;
     c.font = "900 25px Arial, sans-serif";
-    c.fillText("זירת ההדחה", WORLD.width / 2, 205);
+    c.fillText("ברואליציה", WORLD.width / 2, 205);
     c.fillStyle = "#aeb6d6";
     c.font = "bold 11px Arial, sans-serif";
     c.fillText("סיבוב אחד · בלי חסינות", WORLD.width / 2, 224);

@@ -35,7 +35,7 @@ def build(site_url=None):
         site_url = site_url.rstrip("/") + "/"
 
     output = ROOT / "dist"
-    archive = ROOT / "arena-hadacha-poc.zip"
+    archive = ROOT / "brawalitzia-poc.zip"
     if output.is_symlink() or archive.is_symlink():
         raise ValueError("Release targets must not be symbolic links.")
     if output.exists():

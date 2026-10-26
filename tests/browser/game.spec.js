@@ -46,10 +46,10 @@ test("Hebrew RTL game opens on a real main menu with both play modes and owned a
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
-  await expect(page).toHaveTitle("זירת ההדחה — משחק זירה סאטירי");
+  await expect(page).toHaveTitle("ברואליציה — משחק זירה סאטירי");
   await expect(page.locator("html")).toHaveAttribute("lang", "he");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.getByRole("heading", { name: "זירת ההדחה" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "ברואליציה" })).toBeVisible();
   await expect(page.getByRole("button", { name: "מול המחשב" })).toBeVisible();
   await expect(page.getByRole("button", { name: "קרב מקומי" })).toBeVisible();
   await expect(page.locator(".fighter-lineup")).toBeVisible();
@@ -96,7 +96,7 @@ test("character select shows four fighters and supports a Tally mirror match", a
   let state = await snapshot(page);
   expect(state.fighters.map(fighter => fighter.id)).toEqual(["gotliv", "gotliv"]);
   await page.keyboard.press("f");
-  await page.clock.runFor(150);
+  await page.clock.runFor(220);
   state = await snapshot(page);
   expect(state.projectiles).toContain("objection");
 });
