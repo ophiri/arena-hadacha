@@ -32,6 +32,9 @@
         </button>
         <div class="topbar-actions">
           <button class="text-button" id="help-button" type="button">איך משחקים</button>
+          <button class="icon-button input-mode-button" id="input-mode-button" type="button" aria-label="בחירת אמצעי שליטה" title="מקלדת או מגע">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a4 4 0 0 1 3.7 5.5l-1.3 3.2a2 2 0 0 1-3.2.8L14.5 16h-5l-1.7 1.5a2 2 0 0 1-3.2-.8l-1.3-3.2A4 4 0 0 1 7 8Z"/><path d="M8 11v4m-2-2h4m6-1h.01M18 14h.01"/></svg>
+          </button>
           <button class="icon-button" id="sound-button" type="button" aria-label="הפעלת צליל" aria-pressed="false" title="צליל (M)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="sound-waves" d="m16 9 5 6m0-6-5 6"/></svg>
           </button>
@@ -164,6 +167,18 @@
             </div>
           </div>
 
+          <div class="touch-controls" id="touch-controls" aria-label="בקרי מגע לשחקן 1" hidden>
+            <div class="touch-control-group touch-movement" dir="ltr">
+              <button class="touch-control touch-direction" type="button" data-touch-action="left" aria-label="תנועה שמאלה"><span aria-hidden="true">←</span><small>שמאלה</small></button>
+              <button class="touch-control touch-direction" type="button" data-touch-action="right" aria-label="תנועה ימינה"><span aria-hidden="true">→</span><small>ימינה</small></button>
+            </div>
+            <button class="touch-control touch-jump" type="button" data-touch-action="jump" aria-label="קפיצה כפולה"><span aria-hidden="true">↑</span><small>קפיצה</small></button>
+            <div class="touch-control-group touch-attacks">
+              <button class="touch-control touch-basic" type="button" data-touch-action="basic" aria-label="התקפה בסיסית"><span aria-hidden="true">✦</span><small>מכה</small></button>
+              <button class="touch-control touch-charge" type="button" data-touch-action="charge" aria-label="החזקת מכת טעינה"><span aria-hidden="true">⚡</span><small>להחזיק</small></button>
+            </div>
+          </div>
+
           <div class="controls-ribbon" aria-label="מקשי המשחק">
             <article class="control-set control-one">
               <div><span class="player-chip">1P</span><h2 id="controls-name-0">בנימין נתניהו</h2></div>
@@ -178,6 +193,24 @@
         </section>
       </main>
     </div>
+
+    <dialog class="input-choice-dialog" id="input-dialog" aria-labelledby="input-title">
+      <span class="input-dialog-kicker">זוהה מסך מגע</span>
+      <h2 id="input-title">איך תרצו לשלוט?</h2>
+      <p>אפשר להציג בקר משחק על המסך, או להישאר עם מקלדת. תמיד אפשר לשנות דרך אייקון השלט למעלה.</p>
+      <div class="input-choice-actions">
+        <button class="input-choice touch-choice" id="touch-mode-choice" type="button">
+          <span aria-hidden="true">●</span>
+          <b>כפתורי מגע</b>
+          <small>מומלץ בטלפון · שחקן 1</small>
+        </button>
+        <button class="input-choice" id="keyboard-mode-choice" type="button">
+          <span aria-hidden="true">⌨</span>
+          <b>מקלדת</b>
+          <small>למחשב או לשני שחקנים</small>
+        </button>
+      </div>
+    </dialog>
 
     <dialog id="help-dialog" aria-labelledby="help-title">
       <form method="dialog"><button class="dialog-close" aria-label="סגירת ההוראות">×</button></form>

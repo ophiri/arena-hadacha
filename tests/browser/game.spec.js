@@ -233,3 +233,48 @@ test("mobile layout keeps menu, roster and fight controls inside the viewport", 
   await expect(page.locator(".controls-ribbon")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+test("coarse pointer users can opt into held touch controls", async ({ page }) => {
+  await page.addInitScript(() => {
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    window.matchMedia = query => query === "(pointer: coarse)"
+      ? {
+          matches: true,
+          media: query,
+          onchange: null,
+          addEventListener() {},
+          removeEventListener() {},
+          addListener() {},
+          removeListener() {},
+          dispatchEvent() { return true; },
+        }
+      : nativeMatchMedia(query);
+  });
+  await page.clock.install();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await expect(page.getByRole("dialog", { name: "איך תרצו לשלוט?" })).toBeVisible();
+  await page.getByRole("button", { name: "כפתורי מגע" }).click();
+  await page.getByRole("button", { name: "קרב מקומי" }).click();
+  await page.locator("#fight-button").click();
+  await expect(page.locator("#touch-controls")).toBeVisible();
+
+  const before = await snapshot(page);
+  await page.locator('[data-touch-action="right"]').dispatchEvent("pointerdown", { pointerId: 11, pointerType: "touch" });
+  await page.clock.runFor(260);
+  await page.locator("body").dispatchEvent("pointerup", { pointerId: 11, pointerType: "touch" });
+  const moved = await snapshot(page);
+  expect(moved.fighters[0].x).toBeGreaterThan(before.fighters[0].x + 25);
+
+  await page.locator('[data-touch-action="jump"]').dispatchEvent("pointerdown", { pointerId: 12, pointerType: "touch" });
+  await page.clock.runFor(80);
+  await page.locator("body").dispatchEvent("pointerup", { pointerId: 12, pointerType: "touch" });
+  expect((await snapshot(page)).fighters[0].y).toBeLessThan(moved.fighters[0].y - 12);
+
+  await page.locator('[data-touch-action="charge"]').dispatchEvent("pointerdown", { pointerId: 13, pointerType: "touch" });
+  await page.clock.runFor(1800);
+  expect((await snapshot(page)).fighters[0].charge).toBeCloseTo(1.5, 2);
+  await page.locator("body").dispatchEvent("pointerup", { pointerId: 13, pointerType: "touch" });
+  await page.clock.runFor(30);
+  expect((await snapshot(page)).fighters[0].attack).toBe("charge");
+});

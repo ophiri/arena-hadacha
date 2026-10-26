@@ -10,6 +10,7 @@ export const session = {
   screen: "home",
   mode: "cpu",
   activeSlot: 0,
+  touchEnabled: false,
 };
 
 const cpu = new CpuController(1);
@@ -19,7 +20,10 @@ const KEYMAP = [
 ];
 const GAME_KEYS = new Set(KEYMAP.flatMap(mapping => Object.values(mapping)));
 const heldKeys = new Set();
+const touchHeldKeys = new Set();
+const activeTouchPointers = new Map();
 const queued = KEYMAP.map(() => ({ jumpPressed: false, basicPressed: false, chargeReleased: false }));
+const TOUCH_CODES = KEYMAP[0];
 const STEP = 1 / 120;
 let renderer;
 let ready = false;
@@ -29,6 +33,7 @@ let lastTimestamp = 0;
 let accumulator = 0;
 let toastTimer;
 let resumeAfterHelp = false;
+let resumeAfterInputChoice = false;
 let previousState = "";
 
 const spritePaths = {
@@ -58,6 +63,12 @@ function loadImage(name, image) {
 
 function clearInput({ cancelCharge = true } = {}) {
   heldKeys.clear();
+  touchHeldKeys.clear();
+  activeTouchPointers.clear();
+  for (const button of document.querySelectorAll("[data-touch-action]")) {
+    button.classList.remove("is-held");
+    button.setAttribute("aria-pressed", "false");
+  }
   for (const input of queued) {
     input.jumpPressed = false;
     input.basicPressed = false;
@@ -69,10 +80,10 @@ function clearInput({ cancelCharge = true } = {}) {
 function fighterInput(index) {
   const mapping = KEYMAP[index];
   return {
-    left: heldKeys.has(mapping.left),
-    right: heldKeys.has(mapping.right),
-    jumpHeld: heldKeys.has(mapping.jump),
-    chargeHeld: heldKeys.has(mapping.charge),
+    left: heldKeys.has(mapping.left) || touchHeldKeys.has(mapping.left),
+    right: heldKeys.has(mapping.right) || touchHeldKeys.has(mapping.right),
+    jumpHeld: heldKeys.has(mapping.jump) || touchHeldKeys.has(mapping.jump),
+    chargeHeld: heldKeys.has(mapping.charge) || touchHeldKeys.has(mapping.charge),
     ...queued[index],
   };
 }
@@ -100,7 +111,61 @@ function showScreen(screen) {
   clearInput();
   lastTimestamp = 0;
   accumulator = 0;
+  syncTouchUi();
   requestAnimationFrame(() => renderer?.resize());
+}
+
+function readSavedInputMode() {
+  try {
+    return localStorage.getItem("arena-input-mode");
+  } catch (error) {
+    console.warn("Input preference could not be read:", error);
+    return null;
+  }
+}
+
+function saveInputMode(mode) {
+  try {
+    localStorage.setItem("arena-input-mode", mode);
+  } catch (error) {
+    console.warn("Input preference could not be saved:", error);
+  }
+}
+
+function syncTouchUi() {
+  document.body.classList.toggle("touch-enabled", session.touchEnabled);
+  $("touch-controls").hidden = !session.touchEnabled || session.screen !== "arena";
+  $("input-mode-button").classList.toggle("is-active", session.touchEnabled);
+  $("input-mode-button").setAttribute(
+    "aria-label",
+    session.touchEnabled ? "כפתורי מגע פעילים; שינוי אמצעי שליטה" : "מקלדת פעילה; שינוי אמצעי שליטה",
+  );
+  const localHint = $("local-mode-button").querySelector("small");
+  localHint.textContent = session.touchEnabled
+    ? "שחקן 1 במגע, שחקן 2 במקלדת"
+    : "שני שחקנים על מקלדת אחת";
+  renderer?.resize();
+}
+
+function setInputMode(mode, { persist = true } = {}) {
+  session.touchEnabled = mode === "touch";
+  clearInput();
+  syncTouchUi();
+  if (persist) saveInputMode(session.touchEnabled ? "touch" : "keyboard");
+  if ($("input-dialog").open) $("input-dialog").close();
+  if (resumeAfterInputChoice && game.state === "paused") game.pause();
+  resumeAfterInputChoice = false;
+  syncUI(true);
+  if (session.screen === "arena") {
+    toast(session.touchEnabled ? "בקר המגע פעיל לשחקן 1." : "חזרנו לשליטה מהמקלדת.");
+  }
+}
+
+function openInputChoice() {
+  resumeAfterInputChoice = session.screen === "arena" && game.state === "playing";
+  if (resumeAfterInputChoice) pause();
+  clearInput();
+  if (!$("input-dialog").open) $("input-dialog").showModal();
 }
 
 function cpuOpponentFor(characterId) {
@@ -249,7 +314,9 @@ function updateCharacterUI() {
   canvas.setAttribute(
     "aria-label",
     `זירת ההדחה. ${game.fighters[0].name} מול ${game.fighters[1].name}. ` +
-    "A ו-D לתנועה, W לקפיצה כפולה, F למכה, G למכת טעינה.",
+    (session.touchEnabled
+      ? "כפתורי המגע שולטים בתנועה, קפיצה כפולה, מכה ומכת טעינה."
+      : "A ו-D לתנועה, W לקפיצה כפולה, F למכה, G למכת טעינה."),
   );
 }
 
@@ -263,7 +330,11 @@ function startFight() {
   showScreen("arena");
   syncUI(true);
   canvas.focus({ preventScroll: true });
-  toast(session.mode === "cpu" ? "המחשב נכנס לזירה. אל תתנו לו זמן לטעון." : "שני שחקנים. מקלדת אחת. בלי תירוצים.");
+  toast(session.touchEnabled
+    ? "בקר המגע פעיל. את כפתור הברק מחזיקים ומשחררים."
+    : session.mode === "cpu"
+      ? "המחשב נכנס לזירה. אל תתנו לו זמן לטעון."
+      : "שני שחקנים. מקלדת אחת. בלי תירוצים.");
 }
 
 function startOrResume() {
@@ -513,6 +584,39 @@ window.addEventListener("keyup", event => {
   if (GAME_KEYS.has(event.code)) event.preventDefault();
 });
 
+function pressTouchControl(event) {
+  if (!session.touchEnabled || session.screen !== "arena" || game.state !== "playing") return;
+  const button = event.currentTarget;
+  const action = button.dataset.touchAction;
+  const code = TOUCH_CODES[action];
+  if (!code || activeTouchPointers.has(event.pointerId)) return;
+  event.preventDefault();
+  activeTouchPointers.set(event.pointerId, code);
+  if (!touchHeldKeys.has(code)) {
+    if (action === "jump") queued[0].jumpPressed = true;
+    if (action === "basic") queued[0].basicPressed = true;
+  }
+  touchHeldKeys.add(code);
+  button.classList.add("is-held");
+  button.setAttribute("aria-pressed", "true");
+}
+
+function releaseTouchControl(event) {
+  const code = activeTouchPointers.get(event.pointerId);
+  if (!code) return;
+  event.preventDefault();
+  activeTouchPointers.delete(event.pointerId);
+  if ([...activeTouchPointers.values()].includes(code)) return;
+  if (code === TOUCH_CODES.charge && touchHeldKeys.has(code) && game.state === "playing") {
+    queued[0].chargeReleased = true;
+  }
+  touchHeldKeys.delete(code);
+  const action = Object.entries(TOUCH_CODES).find(([, mappedCode]) => mappedCode === code)?.[0];
+  const button = document.querySelector(`[data-touch-action="${action}"]`);
+  button?.classList.remove("is-held");
+  button?.setAttribute("aria-pressed", "false");
+}
+
 window.addEventListener("blur", () => {
   if (session.screen === "arena" && game.state === "playing") game.pause();
   clearInput();
@@ -546,6 +650,9 @@ $("play-button").addEventListener("click", startOrResume);
 $("restart-button").addEventListener("click", restartRound);
 $("pause-button").addEventListener("click", pause);
 $("sound-button").addEventListener("click", toggleSound);
+$("input-mode-button").addEventListener("click", openInputChoice);
+$("touch-mode-choice").addEventListener("click", () => setInputMode("touch"));
+$("keyboard-mode-choice").addEventListener("click", () => setInputMode("keyboard"));
 $("help-button").addEventListener("click", openHelp);
 $("fullscreen-button").addEventListener("click", toggleFullscreen);
 $("change-fighters-button").addEventListener("click", returnToSelection);
@@ -563,7 +670,21 @@ document.addEventListener("fullscreenchange", () => {
   renderer?.resize();
 });
 
+for (const button of document.querySelectorAll("[data-touch-action]")) {
+  button.setAttribute("aria-pressed", "false");
+  button.addEventListener("pointerdown", pressTouchControl);
+}
+window.addEventListener("pointerup", releaseTouchControl);
+window.addEventListener("pointercancel", releaseTouchControl);
+$("input-dialog").addEventListener("cancel", () => setInputMode("keyboard"));
+
 if (!appShell.requestFullscreen) $("fullscreen-button").hidden = true;
+
+const savedInputMode = readSavedInputMode();
+setInputMode(savedInputMode === "touch" ? "touch" : "keyboard", { persist: false });
+if (!savedInputMode && matchMedia("(pointer: coarse)").matches) {
+  requestAnimationFrame(openInputChoice);
+}
 
 buildRoster();
 updateSelectionUI();

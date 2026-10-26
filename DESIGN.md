@@ -34,6 +34,7 @@ Use `Tahoma, "Segoe UI", Arial, sans-serif`. Hebrew display copy is very heavy, 
 - **Main menu:** giant title and vertical mode menu opposite a four-fighter lineup already under arena lights.
 - **Character select:** two large opposing fighter previews above a four-card roster; the active chooser is explicit.
 - **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame.
+- **Touch fight:** the keyboard ribbon is replaced by three physical control banks—direction, jump, and attacks—without covering the arena.
 - **Pause/result:** an in-arena broadcast takeover with rematch, roster, and main-menu actions.
 
 RTL governs copy and reading order. Physical left/right controls are never semantically reversed.
@@ -48,6 +49,8 @@ RTL governs copy and reading order. Physical left/right controls are never seman
 ## Interaction States
 
 Every user-visible state is explicit: home, mode selection, character selection, playing, paused, and round over. The computer mode labels slot two as CPU and removes irrelevant player-two key instructions. Blur, visibility changes, help, pause, restart, and navigation all clear held inputs.
+
+On coarse-pointer devices, a one-time opening choice offers touch controls or keyboard. The top-bar controller icon reopens that choice. Touch buttons behave like held game inputs rather than ordinary taps: movement continues while pressed and the charge attack fires only on release.
 
 ## Voice
 

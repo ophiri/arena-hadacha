@@ -24,6 +24,7 @@ An original satirical Israeli political arena fighter presented as a fictional f
 - Four selectable satirical fighters: בנימין נתניהו, איתמר בן גביר, טלי גוטליב, and נפתלי בנט.
 - Single-player against a deterministic computer controller.
 - Local two-player on one keyboard, including mirror matches.
+- Optional on-screen controls for touch devices, with held movement and charge input.
 - Every fighter has horizontal movement, a double jump, a unique basic projectile, and a held charge attack capped at 1.5 seconds.
 - Attacks deal damage and knockback; accumulated damage increases later knockback.
 - A round ends on a ring-out and supports rematch, roster change, or return to the main menu.
@@ -52,4 +53,4 @@ The experience is clearly fictional satire. Preserve the bold dark arcade palett
 
 ## Accessibility & Inclusion
 
-Use semantic Hebrew controls, visible keyboard focus, readable contrast, reduced-motion support, keyboard-operable menus, and live text announcements for round and winner states.
+Use semantic Hebrew controls, visible keyboard focus, readable contrast, reduced-motion support, keyboard-operable menus, touch targets sized for phones, and live text announcements for round and winner states.
