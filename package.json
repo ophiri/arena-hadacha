@@ -1,0 +1,20 @@
+{
+  "name": "arena-hadacha-poc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "זירת ההדחה — משחק זירה סאטירי מקורי נגד חבר או נגד המחשב.",
+  "scripts": {
+    "start": "python3 -m http.server 8080 --bind 127.0.0.1",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "playwright test",
+    "build": "python3 tools/build_site.py",
+    "assets:arena": "node tools/create_arena_attack_sprites.mjs",
+    "assets:gotliv": "python3 tools/process_gotliv_sprites.py",
+    "assets:bennett": "python3 tools/process_bennett_sprites.py",
+    "pretest:browser": "npm run build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

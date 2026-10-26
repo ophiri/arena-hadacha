@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" lang="he" width="80" height="112" viewBox="0 0 80 112">
+<title>איתמר בן גביר מוסר אקדח צעצוע — דמות מצוירת מקורית למשחק</title>
+<desc>Original stylized vector character for a fictional platform game, not a photograph.</desc>
+<defs>
+<g id="head" stroke="#352f30" stroke-width="1.4" stroke-linejoin="round">
+  <path fill="#e7b68e" d="M20 24Q22 10 41 10Q59 10 62 26L59 45Q53 59 40 60Q26 57 21 45Z"/>
+  <path fill="#393331" d="M20 29L17 23Q16 9 30 8L46 8Q62 9 63 24L58 32L53 20L27 21L23 32Z"/>
+  <path fill="#20263a" d="M28 10Q40 -1 54 11L46 14L33 13Z"/>
+  <path fill="#595047" d="M22 42L29 45L33 42L40 46L48 43L57 42L55 53L44 61L34 58L26 52Z"/>
+  <path fill="#edc5a0" stroke="none" d="M30 46L40 49L50 46L48 52L37 54Z"/>
+  <path fill="#fff3de" d="M31 48Q40 45 50 48L46 52L35 52Z"/>
+  <rect x="22" y="29" width="16" height="11" rx="3" fill="#e8e6d5" fill-opacity=".4" stroke-width="2"/>
+  <rect x="43" y="29" width="16" height="11" rx="3" fill="#e8e6d5" fill-opacity=".4" stroke-width="2"/>
+  <path fill="none" stroke-width="2" d="M38 32L43 32M18 31L22 32M59 32L63 30"/>
+  <circle cx="31" cy="34" r="2"/><circle cx="50" cy="34" r="2"/>
+  <path fill="none" stroke="#aa775e" d="M40 35L37 43L43 44"/>
+</g>
+</defs>
+
+<g stroke="#353441" stroke-width="1.5" stroke-linejoin="round">
+  <path fill="#303a50" d="M25 80H39L36 106H23ZM41 80H54L58 106H44Z"/>
+  <path fill="#242936" d="M23 101H36L40 108H19ZM44 101H58L64 108H44Z"/>
+  <path fill="#efc6a0" d="M33 52H47V63H33Z"/>
+  <path fill="#f7f0dc" d="M30 57H50V85H30Z"/>
+  <path fill="#3b475e" d="M30 55L20 60L24 87H37L34 62ZM49 55L59 61L56 87H41L46 61Z"/>
+  <path fill="#50617b" d="M27 57L23 64L30 70L28 73L37 86ZM51 57L56 64L49 70L52 74L42 86Z"/>
+  <path fill="#35445c" d="M22 59L15 65L13 81L22 83L28 65ZM57 60L64 63L65 77L57 80L51 65Z"/>
+  <ellipse cx="17" cy="83" rx="5" ry="5" fill="#e5b78f"/>
+  <ellipse cx="62" cy="79" rx="5" ry="5" fill="#e5b78f"/>
+</g>
+<use href="#head"/>
+<g stroke="#443351" stroke-width="1.3" stroke-linejoin="round">
+  <path fill="#ad72d5" d="M54 63H75V71H65L63 83H56L58 71H54Z"/>
+  <path fill="#ffad49" d="M73 62H79V72H73Z"/>
+  <path fill="#ffe889" d="M58 64H70V67H58Z"/>
+  <circle cx="62" cy="70" r="3" fill="#e9faf0"/>
+</g>
+
+</svg>

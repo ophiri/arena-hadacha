@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" lang="he" width="80" height="112" viewBox="0 0 80 112">
+<title>גדי אייזנקוט, אקדוחן קונפטי — דמות מצוירת מקורית למשחק</title>
+<desc>Original stylized vector character for a fictional platform game, not a photograph.</desc>
+<defs>
+<g id="head" stroke="#42392f" stroke-width="1.3" stroke-linejoin="round">
+  <path fill="#dfb28c" d="M19 28Q17 10 37 7Q61 5 63 29L61 43Q57 58 41 60Q24 58 20 43Z"/>
+  <ellipse cx="19" cy="36" rx="4" ry="7" fill="#dfb28c"/>
+  <ellipse cx="62" cy="36" rx="4" ry="7" fill="#dfb28c"/>
+  <path fill="#777773" d="M19 31Q15 13 29 9L32 15Q23 21 24 34ZM51 11Q65 13 63 33L57 34Q58 23 51 17Z"/>
+  <path fill="#f0c6a2" stroke="none" d="M29 18Q41 10 53 21L55 38Q50 49 40 50Q28 47 26 36Z"/>
+  <path fill="none" stroke="#68615a" stroke-width="3.2" d="M25 30Q31 26 37 30M44 30Q50 26 56 30"/>
+  <path fill="#fff8df" d="M25 35Q31 31 37 35Q31 40 25 35ZM44 35Q50 31 56 35Q50 40 44 35Z"/>
+  <circle cx="32" cy="35" r="2" fill="#544d43"/><circle cx="49" cy="35" r="2" fill="#544d43"/>
+  <path fill="#cc9b77" d="M40 33L36 43Q41 47 46 42"/>
+  <path fill="none" stroke="#885f50" stroke-width="1.6" d="M29 49Q41 54 53 48M30 44L28 46M53 43L55 46"/>
+  <path fill="none" stroke="#c09270" d="M31 22Q41 19 51 22M33 24L48 24M35 56L46 56"/>
+</g>
+</defs>
+
+<g stroke="#3d3030" stroke-width="1.5" stroke-linejoin="round">
+  <path fill="#566578" d="M26 82H40L36 100H24ZM42 82H54L58 100H45Z"/>
+  <path fill="#76513a" d="M24 94H36V103L39 108H19L20 103ZM45 94H57L59 102L66 106V108H44Z"/>
+  <path fill="#e6c06b" d="M24 97H35V99H24ZM46 97H57V99H46Z"/>
+</g>
+
+<g stroke="#49342d" stroke-width="1.5" stroke-linejoin="round">
+  <path fill="#e0ad87" d="M34 50H46V65H34Z"/>
+  <path fill="#f5dba0" d="M28 57H52L58 83H22Z"/>
+  <path fill="#86603e" d="M27 55L20 63L24 85H36L34 60ZM52 55L59 63L56 85H43L46 60Z"/>
+  <path fill="#f1d598" d="M22 60L16 64L12 78L20 83L28 66ZM56 60L60 65L70 65L70 73L57 74L51 66Z"/>
+  <ellipse cx="17" cy="83" rx="5" ry="5" fill="#e0ad87"/>
+  <ellipse cx="68" cy="70" rx="5" ry="5" fill="#e0ad87"/>
+  <path fill="#4c3530" d="M24 81H56V88H24Z"/>
+  <rect x="36" y="81" width="9" height="7" fill="#ffd66a"/>
+  <path fill="#e8b341" d="M31 54L41 59L50 54L47 64L38 68L33 61Z"/>
+  <path fill="#ffe591" d="M29 66L31 70L35 71L32 74L32 78L29 76L25 78L26 74L23 71L27 70Z"/>
+</g>
+<use href="#head"/>
+<g stroke="#46322c" stroke-width="1.5" stroke-linejoin="round">
+  <path fill="#a77548" d="M23 18L26 5L35 3L41 8L49 3L56 6L59 20Z"/>
+  <path fill="#563a31" d="M24 14L58 15L59 21L23 20Z"/>
+  <path fill="#c69357" d="M8 16Q21 21 37 20Q60 23 73 16L70 24Q41 31 12 23Z"/>
+</g>
+
+<g stroke="#443351" stroke-width="1.3" stroke-linejoin="round">
+  <path fill="#ad72d5" d="M54 63H75V71H65L63 83H56L58 71H54Z"/>
+  <path fill="#ffad49" d="M73 62H79V72H73Z"/>
+  <path fill="#ffe889" d="M58 64H70V67H58Z"/>
+  <circle cx="62" cy="70" r="3" fill="#e9faf0"/>
+</g>
+
+</svg>

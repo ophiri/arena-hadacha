@@ -1,0 +1,11 @@
+.venv/
+node_modules/
+test-results/
+playwright-report/
+.DS_Store
+dist/
+super-bibi-3.zip
+arena-hadacha-poc.zip
+.vercel/
+.impeccable/
+bibi_web_test/

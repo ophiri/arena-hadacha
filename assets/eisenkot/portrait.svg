@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" lang="he" width="80" height="112" viewBox="0 0 80 112">
+<title>גדי אייזנקוט — דמות מצוירת מקורית למשחק</title>
+<desc>Original stylized vector character for a fictional platform game, not a photograph.</desc>
+<defs>
+<g id="head" stroke="#42392f" stroke-width="1.3" stroke-linejoin="round">
+  <path fill="#dfb28c" d="M19 28Q17 10 37 7Q61 5 63 29L61 43Q57 58 41 60Q24 58 20 43Z"/>
+  <ellipse cx="19" cy="36" rx="4" ry="7" fill="#dfb28c"/>
+  <ellipse cx="62" cy="36" rx="4" ry="7" fill="#dfb28c"/>
+  <path fill="#777773" d="M19 31Q15 13 29 9L32 15Q23 21 24 34ZM51 11Q65 13 63 33L57 34Q58 23 51 17Z"/>
+  <path fill="#f0c6a2" stroke="none" d="M29 18Q41 10 53 21L55 38Q50 49 40 50Q28 47 26 36Z"/>
+  <path fill="none" stroke="#68615a" stroke-width="3.2" d="M25 30Q31 26 37 30M44 30Q50 26 56 30"/>
+  <path fill="#fff8df" d="M25 35Q31 31 37 35Q31 40 25 35ZM44 35Q50 31 56 35Q50 40 44 35Z"/>
+  <circle cx="32" cy="35" r="2" fill="#544d43"/><circle cx="49" cy="35" r="2" fill="#544d43"/>
+  <path fill="#cc9b77" d="M40 33L36 43Q41 47 46 42"/>
+  <path fill="none" stroke="#885f50" stroke-width="1.6" d="M29 49Q41 54 53 48M30 44L28 46M53 43L55 46"/>
+  <path fill="none" stroke="#c09270" d="M31 22Q41 19 51 22M33 24L48 24M35 56L46 56"/>
+</g>
+</defs>
+
+<g stroke="#353441" stroke-width="1.5" stroke-linejoin="round">
+  <path fill="#303a50" d="M25 80H39L36 106H23ZM41 80H54L58 106H44Z"/>
+  <path fill="#242936" d="M23 101H36L40 108H19ZM44 101H58L64 108H44Z"/>
+  <path fill="#efc6a0" d="M33 52H47V63H33Z"/>
+  <path fill="#f7f0dc" d="M30 57H50V85H30Z"/>
+  <path fill="#3b475e" d="M30 55L20 60L24 87H37L34 62ZM49 55L59 61L56 87H41L46 61Z"/>
+  <path fill="#50617b" d="M27 57L23 64L30 70L28 73L37 86ZM51 57L56 64L49 70L52 74L42 86Z"/>
+  <path fill="#35445c" d="M22 59L15 65L13 81L22 83L28 65ZM57 60L64 63L65 77L57 80L51 65Z"/>
+  <ellipse cx="17" cy="83" rx="5" ry="5" fill="#e5b78f"/>
+  <ellipse cx="62" cy="79" rx="5" ry="5" fill="#e5b78f"/>
+</g>
+<use href="#head"/>
+</svg>

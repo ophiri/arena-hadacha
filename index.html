@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0d1b">
+    <meta name="description" content="זירת ההדחה — משחק זירה סאטירי מקורי, נגד חבר או נגד המחשב.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="he_IL">
+    <meta property="og:title" content="זירת ההדחה">
+    <meta property="og:description" content="בוחרים לוחם, צוברים נזק ומעיפים מהזירה.">
+    <title>זירת ההדחה — משחק זירה סאטירי</title>
+    <link rel="icon" href="assets/bibi/idle-0.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="src/game.js"></script>
+  </head>
+  <body>
+    <!--
+      THESIS: A satirical fight-night broadcast becomes a complete game flow, refusing the website-like arena card.
+      OWN-WORLD: Stadium black, scoreboard cream, hazard yellow, corner cyan, torn broadcast bars, and oversized fighter cutouts.
+      STORY: Enter the broadcast, choose solo or local play, lock two fighters, fight, and rematch or return to the roster.
+      FIRST VIEWPORT: A full-screen title lockup and vertical mode menu sit over a four-fighter lineup already under arena lights.
+      FORM: Experience mode; fight-night jumbotron world, cold-open staging, grounded direction three, seed 3a120fac.
+    -->
+    <div class="game-shell" id="app-shell">
+      <div class="arena-lights" aria-hidden="true"></div>
+
+      <header class="game-topbar">
+        <button class="brand-button" id="home-button" type="button" aria-label="חזרה למסך הראשי">
+          <span class="brand-mark" aria-hidden="true">ז</span>
+          <span><b>זירת ההדחה</b><small>פארודיית זירה מקורית</small></span>
+        </button>
+        <div class="topbar-actions">
+          <button class="text-button" id="help-button" type="button">איך משחקים</button>
+          <button class="icon-button" id="sound-button" type="button" aria-label="הפעלת צליל" aria-pressed="false" title="צליל (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="sound-waves" d="m16 9 5 6m0-6-5 6"/></svg>
+          </button>
+          <button class="icon-button" id="fullscreen-button" type="button" aria-label="מסך מלא" title="מסך מלא">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="screen-stack">
+        <section class="game-screen home-screen" id="home-screen" aria-labelledby="home-title">
+          <div class="home-copy">
+            <p class="broadcast-line">שידור חי מהזירה היחידה שבה אחוזים באמת מעיפים</p>
+            <h1 id="home-title"><span>זירת</span> ההדחה</h1>
+            <p class="home-lede">משחק מכות מקורי בעברית. בוחרים דמות, מעלים נזק ומסיימים את הוויכוח מחוץ לבמה.</p>
+            <nav class="main-menu" aria-label="בחירת מצב משחק">
+              <button class="menu-action primary-menu-action" id="cpu-mode-button" type="button">
+                <span class="menu-icon" aria-hidden="true">1P</span>
+                <span><b>מול המחשב</b><small>שחקן אחד נגד יריב אוטומטי</small></span>
+                <i aria-hidden="true">←</i>
+              </button>
+              <button class="menu-action" id="local-mode-button" type="button">
+                <span class="menu-icon" aria-hidden="true">2P</span>
+                <span><b>קרב מקומי</b><small>שני שחקנים על מקלדת אחת</small></span>
+                <i aria-hidden="true">←</i>
+              </button>
+            </nav>
+            <p class="home-hint"><kbd>Enter</kbd> מול המחשב · <kbd>↓</kbd> קרב מקומי · <kbd>M</kbd> צליל</p>
+          </div>
+
+          <div class="fighter-lineup" aria-hidden="true">
+            <figure class="lineup-fighter lineup-bibi"><img src="assets/bibi/idle-0.png" alt=""><span>נתניהו</span></figure>
+            <figure class="lineup-fighter lineup-ben-gvir"><img src="assets/ben-gvir/portrait.svg" alt=""><span>בן גביר</span></figure>
+            <figure class="lineup-fighter lineup-gotliv"><img src="assets/fighters/gotliv-idle.png" alt=""><span>גוטליב</span></figure>
+            <figure class="lineup-fighter lineup-bennett"><img src="assets/fighters/bennett-idle.png" alt=""><span>בנט</span></figure>
+          </div>
+
+          <p class="parody-note">פארודיה בדיונית ועצמאית · לא תשדיר בחירות · אין קשר לאדם או למפלגה המוצגים</p>
+        </section>
+
+        <section class="game-screen select-screen" id="select-screen" aria-labelledby="select-title" hidden>
+          <div class="select-heading">
+            <button class="back-button" id="select-back-button" type="button">→ חזרה</button>
+            <div>
+              <h1 id="select-title">בחרו לוחמים</h1>
+              <p id="select-mode-label">קרב מקומי · שחקן 1 בוחר</p>
+            </div>
+            <span class="mode-plate" id="mode-plate">2 שחקנים</span>
+          </div>
+
+          <div class="versus-preview">
+            <button class="selected-fighter selected-fighter-one is-active" id="selected-fighter-0" type="button" aria-label="בחירת הדמות של שחקן 1">
+              <span class="corner-label" id="slot-label-0">שחקן 1</span>
+              <img id="selected-image-0" src="assets/bibi/idle-0.png" alt="">
+              <span class="selected-copy"><b id="selected-name-0">בנימין נתניהו</b><small id="selected-move-0">זורק לוח איראן</small></span>
+            </button>
+            <div class="versus-signal" aria-hidden="true"><b>VS</b><span>זירה אחת</span></div>
+            <button class="selected-fighter selected-fighter-two" id="selected-fighter-1" type="button" aria-label="בחירת הדמות של שחקן 2">
+              <span class="corner-label" id="slot-label-1">שחקן 2</span>
+              <img id="selected-image-1" src="assets/ben-gvir/portrait.svg" alt="">
+              <span class="selected-copy"><b id="selected-name-1">איתמר בן גביר</b><small id="selected-move-1">זורק את יד כהנא</small></span>
+            </button>
+          </div>
+
+          <div class="roster-zone">
+            <div class="selection-callout" id="selection-callout" role="status" aria-live="polite">
+              <span>עכשיו בוחר</span><b>שחקן 1</b>
+            </div>
+            <div class="roster-grid" id="roster-grid" aria-label="סגל הדמויות"></div>
+          </div>
+
+          <div class="select-footer">
+            <p><kbd>A</kbd><kbd>D</kbd><kbd>W</kbd> לשחקן 1 · <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd> לשחקן 2</p>
+            <button class="fight-button" id="fight-button" type="button" disabled>טוענים את הלוחמים…</button>
+          </div>
+        </section>
+
+        <section class="game-screen arena-screen" id="arena-screen" aria-labelledby="game-title" hidden>
+          <div class="arena-toolbar">
+            <div>
+              <h1 id="game-title"><b id="match-name-0">בנימין נתניהו</b><span>מול</span><b id="match-name-1">איתמר בן גביר</b></h1>
+              <p id="round-label">הראשון שמועף אל מחוץ לזירה מפסיד</p>
+            </div>
+            <div class="toolbar-actions">
+              <span class="match-mode" id="match-mode">קרב מקומי</span>
+              <button class="icon-button" id="pause-button" type="button" aria-label="השהיית המשחק" title="השהיה (P / Esc)" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path id="pause-icon" d="M8 5v14M16 5v14"/></svg>
+              </button>
+              <button class="icon-button" id="restart-button" type="button" aria-label="משחק חוזר" title="משחק חוזר (R)" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="game-stage" id="game-stage">
+            <canvas id="game" tabindex="0" aria-label="זירת ההדחה">
+              המשחק דורש דפדפן שתומך בציור על המסך.
+            </canvas>
+
+            <div class="damage-hud" id="damage-hud" aria-label="מדדי נזק">
+              <article class="fighter-panel fighter-one" id="panel-bibi">
+                <div class="fighter-identity"><span class="player-chip" id="hud-slot-0">שחקן 1</span><strong id="hud-name-0">בנימין נתניהו</strong></div>
+                <div class="damage-line"><b id="damage-bibi" dir="ltr">0%</b><span>נזק</span></div>
+                <div class="damage-track"><i id="damage-fill-bibi"></i></div>
+                <div class="charge-track"><span>טעינה</span><i><b id="charge-fill-bibi"></b></i></div>
+              </article>
+              <div class="versus-badge" aria-hidden="true">VS</div>
+              <article class="fighter-panel fighter-two" id="panel-ben-gvir">
+                <div class="fighter-identity"><span class="player-chip" id="hud-slot-1">שחקן 2</span><strong id="hud-name-1">איתמר בן גביר</strong></div>
+                <div class="damage-line"><b id="damage-ben-gvir" dir="ltr">0%</b><span>נזק</span></div>
+                <div class="damage-track"><i id="damage-fill-ben-gvir"></i></div>
+                <div class="charge-track"><span>טעינה</span><i><b id="charge-fill-ben-gvir"></b></i></div>
+              </article>
+            </div>
+
+            <div class="round-status" id="round-status" role="status" aria-live="polite">ממתינים לפתיחת הסיבוב</div>
+            <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+            <div class="screen-overlay" id="overlay" hidden>
+              <div class="overlay-content">
+                <h2 id="overlay-title">המשחק בהשהיה</h2>
+                <p id="overlay-description">הקרב מחכה בדיוק במקום שבו עצרתם.</p>
+                <button class="fight-button compact-fight-button" id="play-button" type="button">חוזרים לזירה</button>
+                <div class="overlay-actions">
+                  <button class="secondary-button" id="change-fighters-button" type="button">בחירת דמויות</button>
+                  <button class="secondary-button" id="menu-button" type="button">מסך ראשי</button>
+                </div>
+                <p class="overlay-hint" id="overlay-hint"><kbd>P</kbd> או <kbd>Esc</kbd> להמשך</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls-ribbon" aria-label="מקשי המשחק">
+            <article class="control-set control-one">
+              <div><span class="player-chip">1P</span><h2 id="controls-name-0">בנימין נתניהו</h2></div>
+              <p><kbd>A</kbd><kbd>D</kbd> תנועה · <kbd>W</kbd> קפיצה כפולה · <kbd>F</kbd> <span id="basic-move-0">זריקה</span> · <kbd>G</kbd> <span id="charge-move-0">טעינה</span></p>
+            </article>
+            <div class="ringout-rule"><b>מעלים נזק</b><span>ואז מעיפים מהבמה</span></div>
+            <article class="control-set control-two" id="player-two-controls">
+              <div><span class="player-chip" id="controls-slot-1">2P</span><h2 id="controls-name-1">איתמר בן גביר</h2></div>
+              <p id="player-two-keys"><kbd>←</kbd><kbd>→</kbd> תנועה · <kbd>↑</kbd> קפיצה כפולה · <kbd>K</kbd> <span id="basic-move-1">זריקה</span> · <kbd>L</kbd> <span id="charge-move-1">טעינה</span></p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <form method="dialog"><button class="dialog-close" aria-label="סגירת ההוראות">×</button></form>
+      <h2 id="help-title">איך נשארים בזירה?</h2>
+      <div class="help-grid">
+        <p><b>בוחרים מצב</b><span>אפשר לשחק מול המחשב או בקרב מקומי לשני שחקנים על אותה מקלדת.</span></p>
+        <p><b>בוחרים לוחם</b><span>נתניהו, בן גביר, גוטליב ובנט זמינים בכל מצב. גם קרב מראה אפשרי בקרב מקומי.</span></p>
+        <p><b>זזים וקופצים</b><span>לכל לוחם קפיצה מהקרקע ועוד קפיצה אחת באוויר. אפשר לשנות כיוון גם בזמן נפילה.</span></p>
+        <p><b>תוקפים</b><span>המכה הבסיסית מהירה. את מכת הטעינה מחזיקים עד 1.5 שניות ומשחררים בעיתוי הנכון.</span></p>
+        <p><b>מנצחים</b><span>נזק גבוה מגדיל את ההדיפה. רק יציאה מגבולות הזירה קובעת רינג־אאוט.</span></p>
+        <p><b>קיצורים</b><span><kbd>P</kbd> או <kbd>Esc</kbd> להשהיה, <kbd>R</kbd> למשחק חוזר, <kbd>M</kbd> לצליל.</span></p>
+      </div>
+      <form method="dialog"><button class="fight-button compact-fight-button">הבנתי</button></form>
+    </dialog>
+    <noscript><p class="noscript">כדי לשחק בזירת ההדחה, יש לאפשר JavaScript בדפדפן.</p></noscript>
+  </body>
+</html>
