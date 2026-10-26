@@ -242,6 +242,18 @@ test("mobile layout keeps menu, roster and fight controls inside the viewport", 
   await expect(page.locator(".roster-card").first()).toBeVisible();
   await page.locator("#fight-button").click();
   await expect(page.locator(".controls-ribbon")).toBeVisible();
+  const mobileLayout = await page.evaluate(() => {
+    const hud = document.querySelector("#damage-hud").getBoundingClientRect();
+    const stage = document.querySelector("#game-stage").getBoundingClientRect();
+    return {
+      hudBottom: hud.bottom,
+      stageTop: stage.top,
+      stageWidth: stage.width,
+      stageHeight: stage.height,
+    };
+  });
+  expect(mobileLayout.hudBottom).toBeLessThanOrEqual(mobileLayout.stageTop + 1);
+  expect(mobileLayout.stageWidth / mobileLayout.stageHeight).toBeCloseTo(1120 / 620, 1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 

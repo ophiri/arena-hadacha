@@ -33,7 +33,7 @@ Use `Tahoma, "Segoe UI", Arial, sans-serif`. Hebrew display copy is very heavy, 
 
 - **Main menu:** giant title and vertical mode menu opposite a four-fighter lineup already under arena lights.
 - **Character select:** two large opposing fighter previews above a four-card roster; the active chooser is explicit.
-- **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame.
+- **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame. In phone portrait, the HUD becomes a compact strip above the Canvas so it never covers gameplay.
 - **Touch fight:** the keyboard ribbon is replaced by three physical control banks—direction, jump, and attacks—without covering the arena.
 - **Pause/result:** an in-arena broadcast takeover with rematch, roster, and main-menu actions.
 

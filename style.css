@@ -636,10 +636,17 @@ button svg {
   font-size: 8px;
   font-weight: 900;
 }
-.game-stage {
+.arena-viewport {
   position: relative;
   flex: 1;
   min-height: 360px;
+  display: flex;
+  flex-direction: column;
+}
+.game-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
   isolation: isolate;
   border: 2px solid #697391;
@@ -1065,9 +1072,12 @@ dialog form { margin: 0; }
   .arena-toolbar h1 { font-size: 13px; }
   .arena-toolbar p { font-size: 7px; }
   .match-mode { display: none; }
-  .game-stage {
+  .arena-viewport {
     flex: none;
     min-height: 0;
+  }
+  .game-stage {
+    flex: none;
     aspect-ratio: 1120 / 620;
     border-inline: 0;
   }
@@ -1108,6 +1118,37 @@ dialog form { margin: 0; }
   .input-choice-actions { gap: 8px; }
   .input-choice { min-height: 112px; padding: 12px 8px; }
   .input-choice b { font-size: 15px; }
+}
+
+@media (max-width: 700px) and (orientation: portrait) {
+  .arena-viewport {
+    border-top: 1px solid #536080;
+    background: #0d1224;
+  }
+  .damage-hud {
+    position: static;
+    z-index: auto;
+    order: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5px;
+    padding: 6px 8px;
+    border-bottom: 1px solid #536080;
+    background: #10162a;
+  }
+  .game-stage { order: 1; }
+  .fighter-panel {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 7px;
+    padding: 6px 8px 5px;
+    box-shadow: 0 3px 0 #070914;
+  }
+  .fighter-two { grid-column: auto; }
+  .fighter-identity strong { font-size: 9px; }
+  .player-chip { margin-bottom: 1px; font-size: 6px; }
+  .damage-line b { font-size: 21px; }
+  .damage-track { height: 5px; }
+  .charge-track > i { height: 3px; }
+  .round-status { top: 8px; }
 }
 
 @media (max-height: 580px) and (orientation: landscape) {

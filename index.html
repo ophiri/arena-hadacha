@@ -129,11 +129,7 @@
             </div>
           </div>
 
-          <div class="game-stage" id="game-stage">
-            <canvas id="game" tabindex="0" aria-label="ברואליציה">
-              המשחק דורש דפדפן שתומך בציור על המסך.
-            </canvas>
-
+          <div class="arena-viewport">
             <div class="damage-hud" id="damage-hud" aria-label="מדדי נזק">
               <article class="fighter-panel fighter-one" id="panel-bibi">
                 <div class="fighter-identity"><span class="player-chip" id="hud-slot-0">שחקן 1</span><strong id="hud-name-0">בנימין נתניהו</strong></div>
@@ -150,20 +146,26 @@
               </article>
             </div>
 
-            <div class="round-status" id="round-status" role="status" aria-live="polite">ממתינים לפתיחת הסיבוב</div>
-            <div class="toast" id="toast" role="status" aria-live="polite"></div>
+            <div class="game-stage" id="game-stage">
+              <canvas id="game" tabindex="0" aria-label="ברואליציה">
+                המשחק דורש דפדפן שתומך בציור על המסך.
+              </canvas>
 
-            <div class="screen-overlay" id="overlay" hidden>
-              <div class="overlay-content">
-                <img class="winner-sprite" id="winner-sprite" src="assets/fighters/ben-gvir-victory.png" alt="" hidden>
-                <h2 id="overlay-title">המשחק בהשהיה</h2>
-                <p id="overlay-description">הקרב מחכה בדיוק במקום שבו עצרתם.</p>
-                <button class="fight-button compact-fight-button" id="play-button" type="button">חוזרים לזירה</button>
-                <div class="overlay-actions">
-                  <button class="secondary-button" id="change-fighters-button" type="button">בחירת דמויות</button>
-                  <button class="secondary-button" id="menu-button" type="button">מסך ראשי</button>
+              <div class="round-status" id="round-status" role="status" aria-live="polite">ממתינים לפתיחת הסיבוב</div>
+              <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+              <div class="screen-overlay" id="overlay" hidden>
+                <div class="overlay-content">
+                  <img class="winner-sprite" id="winner-sprite" src="assets/fighters/ben-gvir-victory.png" alt="" hidden>
+                  <h2 id="overlay-title">המשחק בהשהיה</h2>
+                  <p id="overlay-description">הקרב מחכה בדיוק במקום שבו עצרתם.</p>
+                  <button class="fight-button compact-fight-button" id="play-button" type="button">חוזרים לזירה</button>
+                  <div class="overlay-actions">
+                    <button class="secondary-button" id="change-fighters-button" type="button">בחירת דמויות</button>
+                    <button class="secondary-button" id="menu-button" type="button">מסך ראשי</button>
+                  </div>
+                  <p class="overlay-hint" id="overlay-hint"><kbd>P</kbd> או <kbd>Esc</kbd> להמשך</p>
                 </div>
-                <p class="overlay-hint" id="overlay-hint"><kbd>P</kbd> או <kbd>Esc</kbd> להמשך</p>
               </div>
             </div>
           </div>
