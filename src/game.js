@@ -38,11 +38,15 @@ let previousState = "";
 
 const spritePaths = {
   bibi: "assets/bibi/idle-0.png",
-  benGvir: "assets/ben-gvir/portrait.svg",
+  benGvirIdle: "assets/fighters/ben-gvir-idle.png",
+  benGvirRun: "assets/fighters/ben-gvir-run.png",
+  benGvirBasic: "assets/fighters/ben-gvir-basic.png",
+  benGvirCharge: "assets/fighters/ben-gvir-charge.png",
+  benGvirProjectile: "assets/fighters/ben-gvir-projectile.png",
+  benGvirVictory: "assets/fighters/ben-gvir-victory.png",
   gotliv: "assets/fighters/gotliv-idle.png",
   bennett: "assets/fighters/bennett-idle.png",
   bibiThrow: "assets/fighters/bibi-throw.png",
-  benGvirThrow: "assets/fighters/ben-gvir-throw.png",
   gotlivThrow: "assets/fighters/gotliv-throw.png",
   gotlivCharge: "assets/fighters/gotliv-charge.png",
   gotlivProjectile: "assets/fighters/gotliv-projectile.png",
@@ -460,6 +464,7 @@ function syncUI(force = false) {
   $("pause-icon").setAttribute("d", paused ? "m8 5 10 7-10 7V5Z" : "M8 5v14M16 5v14");
 
   if (paused) {
+    $("winner-sprite").hidden = true;
     $("overlay-title").textContent = "הקרב בהשהיה";
     $("overlay-description").textContent = "הזירה קפאה. שום נזק, טעינה או נפילה לא מתקדמים עד שחוזרים.";
     $("play-button").textContent = "חוזרים לזירה";
@@ -468,6 +473,11 @@ function syncUI(force = false) {
     $("round-status").textContent = "הסיבוב מושהה";
   } else if (roundOver) {
     const playerWon = session.mode !== "cpu" || game.winner.slot === 0;
+    $("winner-sprite").hidden = false;
+    $("winner-sprite").src = game.winner.id === "ben-gvir"
+      ? "assets/fighters/ben-gvir-victory.png"
+      : game.winner.portrait;
+    $("winner-sprite").alt = `${game.winner.name} בתנוחת ניצחון`;
     $("overlay-title").textContent = session.mode === "cpu" && !playerWon ? "המחשב ניצח" : `${game.winner.name} ניצח!`;
     $("overlay-description").textContent = `${game.loser.name} יצא מגבולות הזירה עם ${game.loser.damage}% נזק. אפשר להתחיל מיד משחק חוזר או להחליף לוחמים.`;
     $("play-button").textContent = "משחק חוזר";
@@ -476,6 +486,7 @@ function syncUI(force = false) {
     $("round-status").textContent = `${game.winner.name} ניצח ברינג־אאוט`;
     $("play-button").focus({ preventScroll: true });
   } else if (game.state === "playing") {
+    $("winner-sprite").hidden = true;
     $("round-label").textContent = `סיבוב ${game.round} · הראשון שמועף מפסיד`;
     $("round-status").textContent = "הסיבוב פעיל";
   }

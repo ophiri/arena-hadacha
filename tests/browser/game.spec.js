@@ -55,7 +55,13 @@ test("Hebrew RTL game opens on a real main menu with both play modes and owned a
   await expect(page.locator(".fighter-lineup")).toBeVisible();
   for (const [path, width, height] of [
     ["assets/fighters/bibi-throw.png", 704, 150],
-    ["assets/fighters/ben-gvir-throw.png", 704, 150],
+    ["assets/fighters/ben-gvir-portrait.png", 112, 144],
+    ["assets/fighters/ben-gvir-idle.png", 704, 150],
+    ["assets/fighters/ben-gvir-run.png", 1056, 150],
+    ["assets/fighters/ben-gvir-basic.png", 704, 150],
+    ["assets/fighters/ben-gvir-charge.png", 704, 150],
+    ["assets/fighters/ben-gvir-projectile.png", 144, 72],
+    ["assets/fighters/ben-gvir-victory.png", 176, 176],
     ["assets/fighters/projectiles-throw.png", 288, 72],
     ["assets/fighters/gotliv-idle.png", 112, 144],
     ["assets/fighters/gotliv-throw.png", 704, 150],

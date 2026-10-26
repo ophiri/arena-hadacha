@@ -144,7 +144,7 @@ test("basic attacks throw distinct fighter projectiles", () => {
   Object.assign(second, { x: 790, y: 412, facing: -1 });
   advance(game, 0.14, [{ basicPressed: true }, { basicPressed: true }]);
   assert.deepEqual(new Set(game.projectiles.map(projectile => projectile.kind)),
-    new Set(["bomb-pad", "kahane-hand"]));
+    new Set(["bomb-pad", "pita"]));
   assert.ok(game.drainEvents().filter(event => event.type === "projectileThrow").length === 2);
 });
 

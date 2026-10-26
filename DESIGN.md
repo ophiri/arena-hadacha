@@ -43,7 +43,7 @@ RTL governs copy and reading order. Physical left/right controls are never seman
 
 - The main menu uses one authored entrance: title resolves from a broadcast blur while the fighter lineup rises from behind the hazard barrier.
 - Gameplay uses short screen shake, impact flash, particles, comic hit words, charge orbit, and synthesized tones.
-- Character-specific strips drive Tally’s objection and hammer, Bennett’s shout and kick, Bibi’s sketchpad, and Ben Gvir’s hand throw.
+- Character-specific strips drive Tally’s objection and hammer, Bennett’s shout and kick, Bibi’s sketchpad, and Ben Gvir’s animated pita, kick, and crocodile sequence.
 - Respect `prefers-reduced-motion` by removing entrance motion, shake, particle travel, and pulsing.
 
 ## Interaction States

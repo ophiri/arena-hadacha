@@ -34,10 +34,10 @@ export const ROSTER = [
     shortName: "בן גביר",
     color: "#73d7ff",
     accent: "#ef5d78",
-    projectileKind: "kahane-hand",
-    basicLabel: "זורק את יד כהנא",
-    chargeLabel: "מכת טעינה",
-    portrait: "assets/ben-gvir/portrait.svg",
+    projectileKind: "pita",
+    basicLabel: "מתקפת פיתה",
+    chargeLabel: "בעיטת תנין",
+    portrait: "assets/fighters/ben-gvir-portrait.png",
   },
   {
     id: "gotliv",
@@ -280,13 +280,14 @@ export class Game {
       w: 46,
       h: 46,
       vx: direction * ATTACKS.basic.projectileSpeed,
-      vy: kind === "bomb-pad" ? -34 : ["objection", "speech-bubble"].includes(kind) ? -48 : -14,
+      vy: kind === "bomb-pad" ? -34 : ["objection", "speech-bubble", "pita"].includes(kind) ? -48 : -14,
       direction,
       age: 0,
       life: 1.65,
       angle: 0,
       spin: kind === "bomb-pad" ? direction * 1.35
         : ["objection", "speech-bubble"].includes(kind) ? direction * 0.45
+          : kind === "pita" ? direction * 3.4
           : direction * 2.2,
     });
     this.emit("projectileThrow", {

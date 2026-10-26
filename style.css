@@ -792,6 +792,14 @@ canvas {
     #090d1cef;
 }
 .overlay-content { max-width: 650px; }
+.winner-sprite {
+  width: 150px;
+  height: 150px;
+  margin: -35px auto 4px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(6px 7px 0 #000);
+}
 #overlay-title {
   margin: 0 0 16px;
   color: var(--yellow);
@@ -1080,6 +1088,7 @@ dialog form { margin: 0; }
   .control-set p { margin-top: 5px; font-size: 7px; line-height: 1.55; }
   .screen-overlay { padding: 20px; }
   #overlay-title { font-size: 45px; }
+  .winner-sprite { width: 112px; height: 112px; margin-top: -18px; }
   #overlay-description { font-size: 11px; }
   .overlay-actions { flex-direction: column; }
   .secondary-button { min-height: 38px; }

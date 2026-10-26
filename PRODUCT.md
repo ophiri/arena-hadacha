@@ -22,6 +22,7 @@ An original satirical Israeli political arena fighter presented as a fictional f
 
 - One original arena.
 - Four selectable satirical fighters: בנימין נתניהו, איתמר בן גביר, טלי גוטליב, and נפתלי בנט.
+- Ben Gvir uses a supplied full sprite set for idle, running, pita, kick, crocodile, and victory animation.
 - Single-player against a deterministic computer controller.
 - Local two-player on one keyboard, including mirror matches.
 - Optional on-screen controls for touch devices, with held movement and charge input.
