@@ -37,7 +37,13 @@ let resumeAfterInputChoice = false;
 let previousState = "";
 
 const spritePaths = {
-  bibi: "assets/bibi/idle-0.png",
+  bibiPortrait: "assets/fighters/bibi-portrait.png",
+  bibiIdle: "assets/fighters/bibi-idle.png",
+  bibiRun: "assets/fighters/bibi-run.png",
+  bibiBasic: "assets/fighters/bibi-basic.png",
+  bibiCharge: "assets/fighters/bibi-charge.png",
+  bibiProjectile: "assets/fighters/bibi-projectile.png",
+  bibiVictory: "assets/fighters/bibi-victory.png",
   benGvirIdle: "assets/fighters/ben-gvir-idle.png",
   benGvirRun: "assets/fighters/ben-gvir-run.png",
   benGvirBasic: "assets/fighters/ben-gvir-basic.png",
@@ -46,14 +52,12 @@ const spritePaths = {
   benGvirVictory: "assets/fighters/ben-gvir-victory.png",
   gotliv: "assets/fighters/gotliv-idle.png",
   bennett: "assets/fighters/bennett-idle.png",
-  bibiThrow: "assets/fighters/bibi-throw.png",
   gotlivThrow: "assets/fighters/gotliv-throw.png",
   gotlivCharge: "assets/fighters/gotliv-charge.png",
   gotlivProjectile: "assets/fighters/gotliv-projectile.png",
   bennettBasic: "assets/fighters/bennett-basic.png",
   bennettCharge: "assets/fighters/bennett-charge.png",
   bennettProjectile: "assets/fighters/bennett-projectile.png",
-  projectiles: "assets/fighters/projectiles-throw.png",
 };
 const sprites = Object.fromEntries(Object.keys(spritePaths).map(name => [name, new Image()]));
 
@@ -474,9 +478,11 @@ function syncUI(force = false) {
   } else if (roundOver) {
     const playerWon = session.mode !== "cpu" || game.winner.slot === 0;
     $("winner-sprite").hidden = false;
-    $("winner-sprite").src = game.winner.id === "ben-gvir"
-      ? "assets/fighters/ben-gvir-victory.png"
-      : game.winner.portrait;
+    $("winner-sprite").src = game.winner.id === "bibi"
+      ? "assets/fighters/bibi-victory.png"
+      : game.winner.id === "ben-gvir"
+        ? "assets/fighters/ben-gvir-victory.png"
+        : game.winner.portrait;
     $("winner-sprite").alt = `${game.winner.name} בתנוחת ניצחון`;
     $("overlay-title").textContent = session.mode === "cpu" && !playerWon ? "המחשב ניצח" : `${game.winner.name} ניצח!`;
     $("overlay-description").textContent = `${game.loser.name} יצא מגבולות הזירה עם ${game.loser.damage}% נזק. אפשר להתחיל מיד משחק חוזר או להחליף לוחמים.`;
@@ -503,7 +509,7 @@ function handleEvents() {
     } else if (event.type === "attack") {
       playTone(event.kind === "charge" ? 140 : 230, event.kind === "charge" ? 0.2 : 0.08, 0, "square", event.kind === "charge" ? 0.06 : 0.025);
     } else if (event.type === "projectileThrow") {
-      const frequency = event.projectile === "bomb-pad" ? 310
+      const frequency = event.projectile === "bomb-diagram" ? 310
         : event.projectile === "objection" ? 390
           : event.projectile === "speech-bubble" ? 445 : 260;
       playTone(frequency, 0.12, 0, "sawtooth", 0.035);

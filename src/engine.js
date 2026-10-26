@@ -23,10 +23,10 @@ export const ROSTER = [
     shortName: "נתניהו",
     color: "#ffd24a",
     accent: "#ff754b",
-    projectileKind: "bomb-pad",
-    basicLabel: "זורק לוח איראן",
-    chargeLabel: "מכת טעינה",
-    portrait: "assets/bibi/idle-0.png",
+    projectileKind: "bomb-diagram",
+    basicLabel: "תרשים פצצה",
+    chargeLabel: "מתקפת שמפניה",
+    portrait: "assets/fighters/bibi-portrait.png",
   },
   {
     id: "ben-gvir",
@@ -280,12 +280,12 @@ export class Game {
       w: 46,
       h: 46,
       vx: direction * ATTACKS.basic.projectileSpeed,
-      vy: kind === "bomb-pad" ? -34 : ["objection", "speech-bubble", "pita"].includes(kind) ? -48 : -14,
+      vy: kind === "bomb-diagram" ? -34 : ["objection", "speech-bubble", "pita"].includes(kind) ? -48 : -14,
       direction,
       age: 0,
       life: 1.65,
       angle: 0,
-      spin: kind === "bomb-pad" ? direction * 1.35
+      spin: kind === "bomb-diagram" ? direction * 1.35
         : ["objection", "speech-bubble"].includes(kind) ? direction * 0.45
           : kind === "pita" ? direction * 3.4
           : direction * 2.2,
@@ -333,7 +333,7 @@ export class Game {
       projectile.x += projectile.vx * dt;
       projectile.y += projectile.vy * dt;
       projectile.angle += projectile.spin * dt;
-      if (projectile.kind === "bomb-pad") projectile.vy += 42 * dt;
+      if (projectile.kind === "bomb-diagram") projectile.vy += 42 * dt;
       const target = this.fighters.find(fighter => fighter.slot !== projectile.ownerSlot);
       if (projectile.life > 0 && target && target.flash <= 0 && overlaps(projectile, target)) {
         this.resolveProjectileHit(projectile, target);

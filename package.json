@@ -10,6 +10,7 @@
     "test:browser": "playwright test",
     "build": "python3 tools/build_site.py",
     "assets:arena": "node tools/create_arena_attack_sprites.mjs",
+    "assets:bibi": "python3 tools/process_bibi_fighter_sprites.py",
     "assets:gotliv": "python3 tools/process_gotliv_sprites.py",
     "assets:ben-gvir": "python3 tools/process_ben_gvir_sprites.py",
     "assets:bennett": "python3 tools/process_bennett_sprites.py",

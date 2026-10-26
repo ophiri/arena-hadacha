@@ -24,9 +24,10 @@ export class Renderer {
     this.reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.attackSprites = {
       bibi: {
-        idle: sprites.bibi,
-        basic: sprites.bibiThrow,
-        charge: this.createAttackStrip(sprites.bibi, 0, "charge"),
+        idle: sprites.bibiIdle,
+        run: sprites.bibiRun,
+        basic: sprites.bibiBasic,
+        charge: sprites.bibiCharge,
       },
       "ben-gvir": {
         idle: sprites.benGvirIdle,
@@ -311,7 +312,7 @@ export class Renderer {
     const spriteSet = this.attackSprites[fighter.id];
     if (attack) {
       const rules = ATTACKS[attack.kind];
-      const hasFourFrameCharge = ["ben-gvir", "gotliv", "bennett"].includes(fighter.id) && attack.kind === "charge";
+      const hasFourFrameCharge = ["bibi", "ben-gvir", "gotliv", "bennett"].includes(fighter.id) && attack.kind === "charge";
       const frame = attack.kind === "basic"
         ? attack.time < rules.activeStart * 0.48 ? 0
           : attack.time < rules.activeStart ? 1
@@ -329,12 +330,12 @@ export class Renderer {
         Math.min(frame, frameCount - 1) * 176, 0, 176, 150,
         -60, -142, 176, 150,
       );
-    } else if (charging && ["ben-gvir", "gotliv", "bennett"].includes(fighter.id)) {
+    } else if (charging && ["bibi", "ben-gvir", "gotliv", "bennett"].includes(fighter.id)) {
       const frame = chargeRatio < 0.34 ? 0 : chargeRatio < 0.76 ? 1 : 2;
       c.drawImage(spriteSet.charge, frame * 176, 0, 176, 150, -60, -142, 176, 150);
-    } else if (fighter.id === "ben-gvir") {
+    } else if (["bibi", "ben-gvir"].includes(fighter.id)) {
       const running = fighter.grounded && Math.abs(fighter.vx) > 40;
-      const frameCount = running ? 6 : 4;
+      const frameCount = fighter.id === "bibi" ? (running ? 4 : 5) : (running ? 6 : 4);
       const frame = Math.floor(time * (running ? 10 : 4)) % frameCount;
       c.drawImage(
         running ? spriteSet.run : spriteSet.idle,
@@ -362,13 +363,15 @@ export class Renderer {
 
   projectile(projectile) {
     const c = this.ctx;
-    if (["objection", "speech-bubble", "pita"].includes(projectile.kind)) {
+    if (["bomb-diagram", "objection", "speech-bubble", "pita"].includes(projectile.kind)) {
       const frame = Math.floor(projectile.age * 10) % 2;
-      const sheet = projectile.kind === "objection"
-        ? this.sprites.gotlivProjectile
-        : projectile.kind === "pita"
-          ? this.sprites.benGvirProjectile
-          : this.sprites.bennettProjectile;
+      const sheet = projectile.kind === "bomb-diagram"
+        ? this.sprites.bibiProjectile
+        : projectile.kind === "objection"
+          ? this.sprites.gotlivProjectile
+          : projectile.kind === "pita"
+            ? this.sprites.benGvirProjectile
+            : this.sprites.bennettProjectile;
       c.save();
       c.translate(projectile.x + projectile.w / 2, projectile.y + projectile.h / 2);
       c.rotate(projectile.angle);
@@ -377,14 +380,13 @@ export class Renderer {
       c.restore();
       return;
     }
-    const pairOffset = projectile.kind === "bomb-pad" ? 0 : 2;
-    const frame = pairOffset + Math.floor(projectile.age * 10) % 2;
-    c.save();
-    c.translate(projectile.x + projectile.w / 2, projectile.y + projectile.h / 2);
-    c.rotate(projectile.angle);
-    if (projectile.direction < 0) c.scale(-1, 1);
-    c.drawImage(this.sprites.projectiles, frame * 72, 0, 72, 72, -31, -31, 62, 62);
-    c.restore();
+    this.ellipse(
+      projectile.x + projectile.w / 2,
+      projectile.y + projectile.h / 2,
+      18,
+      18,
+      COLORS.orange,
+    );
   }
 
   effects(dt) {
