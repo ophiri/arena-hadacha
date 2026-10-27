@@ -32,6 +32,9 @@ async function start(page, mode = "local") {
   await page.locator("#fight-button").click();
   await expect(page.locator("#arena-screen")).toBeVisible();
   await expect(page.locator("#overlay")).toBeHidden();
+  await expect(page.locator("#countdown-label")).toHaveText("3");
+  await page.clock.runFor(3700);
+  await expect(page.locator("#countdown-layer")).toBeHidden();
 }
 
 async function placeFighters(page, gap = 24) {
@@ -98,6 +101,7 @@ test("character select shows four fighters and supports a Tally mirror match", a
   await expect(page.locator("#selected-name-0")).toHaveText("טלי גוטליב");
   await expect(page.locator("#selected-name-1")).toHaveText("טלי גוטליב");
   await page.locator("#fight-button").click();
+  await page.clock.runFor(3700);
   let state = await snapshot(page);
   expect(state.fighters.map(fighter => fighter.id)).toEqual(["gotliv", "gotliv"]);
   await page.keyboard.press("f");
@@ -106,7 +110,7 @@ test("character select shows four fighters and supports a Tally mirror match", a
   expect(state.projectiles).toContain("objection");
 });
 
-test("computer mode selects an opponent and actively controls player two", async ({ page }) => {
+test("countdown freezes the fight and computer mode accepts arrows plus K/L", async ({ page }) => {
   await page.clock.install();
   await page.goto("/");
   await page.getByRole("button", { name: "מול המחשב" }).click();
@@ -115,10 +119,58 @@ test("computer mode selects an opponent and actively controls player two", async
   await page.locator("#fight-button").click();
   const before = await snapshot(page);
   expect(before.mode).toBe("cpu");
-  await page.clock.runFor(1400);
-  const after = await snapshot(page);
+  await expect(page.locator("#countdown-label")).toHaveText("3");
+  await page.keyboard.down("ArrowRight");
+  await page.clock.runFor(1100);
+  await expect(page.locator("#countdown-label")).toHaveText("2");
+  await page.clock.runFor(1000);
+  await expect(page.locator("#countdown-label")).toHaveText("1");
+  await page.clock.runFor(1000);
+  await expect(page.locator("#countdown-label")).toHaveText("קרב!");
+  const frozen = await snapshot(page);
+  expect(frozen.elapsed).toBe(0);
+  expect(frozen.fighters.map(fighter => fighter.x)).toEqual(before.fighters.map(fighter => fighter.x));
+  await page.keyboard.up("ArrowRight");
+  await page.clock.runFor(700);
+  await expect(page.locator("#countdown-layer")).toBeHidden();
+
+  const active = await snapshot(page);
+  await page.keyboard.down("ArrowRight");
+  await page.clock.runFor(260);
+  await page.keyboard.up("ArrowRight");
+  let after = await snapshot(page);
+  expect(after.fighters[0].x).toBeGreaterThan(active.fighters[0].x + 25);
   expect(after.fighters[1].x).not.toBeCloseTo(before.fighters[1].x, 0);
+
+  await page.keyboard.press("ArrowUp");
+  await page.clock.runFor(100);
+  after = await snapshot(page);
+  expect(after.fighters[0].y).toBeLessThan(412);
+
+  await page.evaluate(async () => {
+    const { game } = await import(new URL("src/game.js", location.href).href);
+    Object.assign(game.fighters[0], {
+      x: 300, y: 412, vx: 0, vy: 0, grounded: true, hitstun: 0, cooldown: 0, attack: null,
+    });
+    Object.assign(game.fighters[1], { x: 900, y: 412, vx: 0, vy: 0, grounded: true, hitstun: 0 });
+    game.projectiles = [];
+  });
+  await page.keyboard.press("k");
+  await page.clock.runFor(220);
+  expect((await snapshot(page)).projectiles).toContain("speech-bubble");
+
+  await page.evaluate(async () => {
+    const { game } = await import(new URL("src/game.js", location.href).href);
+    Object.assign(game.fighters[0], { hitstun: 0, cooldown: 0, attack: null });
+  });
+  await page.keyboard.down("l");
+  await page.clock.runFor(800);
+  expect((await snapshot(page)).fighters[0].charge).toBeGreaterThan(0.7);
+  await page.keyboard.up("l");
+  await page.clock.runFor(40);
+  expect((await snapshot(page)).fighters[0].attack).toBe("charge");
   await expect(page.locator("#hud-slot-1")).toHaveText("מחשב");
+  await expect(page.locator("#player-one-keys")).toContainText("K");
 });
 
 test("both keyboard control sets move, double jump and stop on keyup", async ({ page }) => {
@@ -225,9 +277,11 @@ test("release build works from a subdirectory without missing resources", async 
   page.on("response", response => {
     if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`);
   });
+  await page.clock.install();
   await page.goto("/dist/");
   await page.getByRole("button", { name: "מול המחשב" }).click();
   await page.locator("#fight-button").click();
+  await page.clock.runFor(3700);
   await page.keyboard.down("d");
   await expect.poll(async () => (await snapshot(page)).fighters[0].x).toBeGreaterThan(360);
   await page.keyboard.up("d");
@@ -281,6 +335,7 @@ test("coarse pointer users can opt into held touch controls", async ({ page }) =
   await page.getByRole("button", { name: "קרב מקומי" }).click();
   await page.locator("#fight-button").click();
   await expect(page.locator("#touch-controls")).toBeVisible();
+  await page.clock.runFor(3700);
 
   const before = await snapshot(page);
   await page.locator('[data-touch-action="right"]').dispatchEvent("pointerdown", { pointerId: 11, pointerType: "touch" });

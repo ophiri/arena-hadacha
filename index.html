@@ -153,6 +153,9 @@
 
               <div class="round-status" id="round-status" role="status" aria-live="polite">ממתינים לפתיחת הסיבוב</div>
               <div class="toast" id="toast" role="status" aria-live="polite"></div>
+              <div class="countdown-layer" id="countdown-layer" aria-live="assertive" hidden>
+                <span id="countdown-label">3</span>
+              </div>
 
               <div class="screen-overlay" id="overlay" hidden>
                 <div class="overlay-content">
@@ -185,7 +188,7 @@
           <div class="controls-ribbon" aria-label="מקשי המשחק">
             <article class="control-set control-one">
               <div><span class="player-chip">1P</span><h2 id="controls-name-0">בנימין נתניהו</h2></div>
-              <p><kbd>A</kbd><kbd>D</kbd> תנועה · <kbd>W</kbd> קפיצה כפולה · <kbd>F</kbd> <span id="basic-move-0">זריקה</span> · <kbd>G</kbd> <span id="charge-move-0">טעינה</span></p>
+              <p id="player-one-keys"><kbd>A</kbd><kbd>D</kbd> תנועה · <kbd>W</kbd> קפיצה כפולה · <kbd>F</kbd> <span id="basic-move-0">זריקה</span> · <kbd>G</kbd> <span id="charge-move-0">טעינה</span></p>
             </article>
             <div class="ringout-rule"><b>מעלים נזק</b><span>ואז מעיפים מהבמה</span></div>
             <article class="control-set control-two" id="player-two-controls">
@@ -221,7 +224,7 @@
       <div class="help-grid">
         <p><b>בוחרים מצב</b><span>אפשר לשחק מול המחשב או בקרב מקומי לשני שחקנים על אותה מקלדת.</span></p>
         <p><b>בוחרים לוחם</b><span>נתניהו, בן גביר, גוטליב ובנט זמינים בכל מצב. גם קרב מראה אפשרי בקרב מקומי.</span></p>
-        <p><b>זזים וקופצים</b><span>לכל לוחם קפיצה מהקרקע ועוד קפיצה אחת באוויר. אפשר לשנות כיוון גם בזמן נפילה.</span></p>
+        <p><b>זזים וקופצים</b><span>לכל לוחם קפיצה מהקרקע ועוד קפיצה אחת באוויר. מול המחשב אפשר להשתמש ב־WASD או בחצים.</span></p>
         <p><b>תוקפים</b><span>המכה הבסיסית מהירה. את מכת הטעינה מחזיקים עד 1.5 שניות ומשחררים בעיתוי הנכון.</span></p>
         <p><b>מנצחים</b><span>נזק גבוה מגדיל את ההדיפה. רק יציאה מגבולות הזירה קובעת רינג־אאוט.</span></p>
         <p><b>קיצורים</b><span><kbd>P</kbd> או <kbd>Esc</kbd> להשהיה, <kbd>R</kbd> למשחק חוזר, <kbd>M</kbd> לצליל.</span></p>

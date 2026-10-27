@@ -33,7 +33,7 @@ Use `Tahoma, "Segoe UI", Arial, sans-serif`. Hebrew display copy is very heavy, 
 
 - **Main menu:** giant title and vertical mode menu opposite a four-fighter lineup already under arena lights.
 - **Character select:** two large opposing fighter previews above a four-card roster; the active chooser is explicit.
-- **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame. In phone portrait, the HUD becomes a compact strip above the Canvas so it never covers gameplay.
+- **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame. Every round opens with a centered `3 · 2 · 1 · קרב!` broadcast takeover while the simulation is frozen. In phone portrait, the HUD becomes a compact strip above the Canvas so it never covers gameplay.
 - **Touch fight:** the keyboard ribbon is replaced by three physical control banks—direction, jump, and attacks—without covering the arena.
 - **Pause/result:** an in-arena broadcast takeover with rematch, roster, and main-menu actions.
 
@@ -43,12 +43,13 @@ RTL governs copy and reading order. Physical left/right controls are never seman
 
 - The main menu uses one authored entrance: title resolves from a broadcast blur while the fighter lineup rises from behind the hazard barrier.
 - Gameplay uses short screen shake, impact flash, particles, comic hit words, charge orbit, and synthesized tones.
+- The round countdown uses four hard-cut, oversized scoreboard beats rather than a soft loading animation.
 - Character-specific strips drive Tally’s objection and hammer, Bennett’s shout and kick, Bibi’s animated bomb diagram and champagne spray, and Ben Gvir’s animated pita, kick, and crocodile sequence.
 - Respect `prefers-reduced-motion` by removing entrance motion, shake, particle travel, and pulsing.
 
 ## Interaction States
 
-Every user-visible state is explicit: home, mode selection, character selection, playing, paused, and round over. The computer mode labels slot two as CPU and removes irrelevant player-two key instructions. Blur, visibility changes, help, pause, restart, and navigation all clear held inputs.
+Every user-visible state is explicit: home, mode selection, character selection, countdown, playing, paused, and round over. The computer mode labels slot two as CPU, removes irrelevant player-two instructions, and exposes both `A/D/W/F/G` and arrows plus `K/L` as equivalent player-one controls. Blur, visibility changes, help, pause, restart, and navigation all clear held inputs.
 
 On coarse-pointer devices, a one-time opening choice offers touch controls or keyboard. The top-bar controller icon reopens that choice. Touch buttons behave like held game inputs rather than ordinary taps: movement continues while pressed and the charge attack fires only on release.
 

@@ -25,6 +25,7 @@ const activeTouchPointers = new Map();
 const queued = KEYMAP.map(() => ({ jumpPressed: false, basicPressed: false, chargeReleased: false }));
 const TOUCH_CODES = KEYMAP[0];
 const STEP = 1 / 120;
+const COUNTDOWN_DURATION = 3.6;
 let renderer;
 let ready = false;
 let soundEnabled = false;
@@ -35,6 +36,9 @@ let toastTimer;
 let resumeAfterHelp = false;
 let resumeAfterInputChoice = false;
 let previousState = "";
+let countdownRemaining = 0;
+let countdownStep = "";
+let countdownToast = "";
 
 const spritePaths = {
   bibiPortrait: "assets/fighters/bibi-portrait.png",
@@ -85,13 +89,26 @@ function clearInput({ cancelCharge = true } = {}) {
   if (cancelCharge) game.cancelCharging();
 }
 
+function isCountdownActive() {
+  return countdownRemaining > 0;
+}
+
+function mappingsForFighter(index) {
+  if (index === 0 && session.mode === "cpu") return KEYMAP;
+  return [KEYMAP[index]];
+}
+
+function targetFighterForMapping(index) {
+  return session.mode === "cpu" ? 0 : index;
+}
+
 function fighterInput(index) {
-  const mapping = KEYMAP[index];
+  const mappings = mappingsForFighter(index);
   return {
-    left: heldKeys.has(mapping.left) || touchHeldKeys.has(mapping.left),
-    right: heldKeys.has(mapping.right) || touchHeldKeys.has(mapping.right),
-    jumpHeld: heldKeys.has(mapping.jump) || touchHeldKeys.has(mapping.jump),
-    chargeHeld: heldKeys.has(mapping.charge) || touchHeldKeys.has(mapping.charge),
+    left: mappings.some(mapping => heldKeys.has(mapping.left) || touchHeldKeys.has(mapping.left)),
+    right: mappings.some(mapping => heldKeys.has(mapping.right) || touchHeldKeys.has(mapping.right)),
+    jumpHeld: mappings.some(mapping => heldKeys.has(mapping.jump) || touchHeldKeys.has(mapping.jump)),
+    chargeHeld: mappings.some(mapping => heldKeys.has(mapping.charge) || touchHeldKeys.has(mapping.charge)),
     ...queued[index],
   };
 }
@@ -111,11 +128,65 @@ function toast(message) {
   toastTimer = setTimeout(() => $("toast").classList.remove("visible"), 2200);
 }
 
+function countdownValue(remaining) {
+  if (remaining > 2.6) return "3";
+  if (remaining > 1.6) return "2";
+  if (remaining > 0.6) return "1";
+  return "קרב!";
+}
+
+function renderCountdown(value) {
+  if (value === countdownStep) return;
+  countdownStep = value;
+  $("countdown-label").textContent = value;
+  $("countdown-layer").classList.toggle("is-fight", value === "קרב!");
+  $("countdown-layer").classList.remove("is-popping");
+  void $("countdown-layer").offsetWidth;
+  $("countdown-layer").classList.add("is-popping");
+  playTone(value === "קרב!" ? 620 : 360 + (Number(value) || 4) * 55, 0.07, 0, "square", 0.025);
+}
+
+function beginCountdown(message = "") {
+  clearInput();
+  countdownRemaining = COUNTDOWN_DURATION;
+  countdownStep = "";
+  countdownToast = message;
+  $("countdown-layer").hidden = false;
+  renderCountdown(countdownValue(countdownRemaining));
+  syncUI(true);
+}
+
+function cancelCountdown() {
+  countdownRemaining = 0;
+  countdownStep = "";
+  countdownToast = "";
+  $("countdown-layer").hidden = true;
+  $("countdown-layer").classList.remove("is-fight", "is-popping");
+}
+
+function updateCountdown(delta) {
+  if (!isCountdownActive() || game.state !== "playing") return;
+  countdownRemaining = Math.max(0, countdownRemaining - delta);
+  if (countdownRemaining > 0) {
+    renderCountdown(countdownValue(countdownRemaining));
+    return;
+  }
+
+  clearInput();
+  $("countdown-layer").hidden = true;
+  $("countdown-layer").classList.remove("is-fight", "is-popping");
+  countdownStep = "";
+  syncUI(true);
+  if (countdownToast) toast(countdownToast);
+  countdownToast = "";
+}
+
 function showScreen(screen) {
   session.screen = screen;
   for (const name of ["home", "select", "arena"]) {
     $(`${name}-screen`).hidden = name !== screen;
   }
+  if (screen !== "arena") cancelCountdown();
   clearInput();
   lastTimestamp = 0;
   accumulator = 0;
@@ -312,9 +383,14 @@ function updateCharacterUI() {
   $("hud-slot-1").textContent = session.mode === "cpu" ? "מחשב" : "שחקן 2";
   $("controls-slot-1").textContent = session.mode === "cpu" ? "CPU" : "2P";
   $("match-mode").textContent = session.mode === "cpu" ? "מול המחשב" : "קרב מקומי";
+  $("player-one-keys").innerHTML = session.mode === "cpu"
+    ? '<kbd>A</kbd><kbd>D</kbd> או <kbd>←</kbd><kbd>→</kbd> תנועה · <kbd>W</kbd>/<kbd>↑</kbd> קפיצה · <kbd>F</kbd>/<kbd>K</kbd> <span id="basic-move-0"></span> · <kbd>G</kbd>/<kbd>L</kbd> <span id="charge-move-0"></span>'
+    : '<kbd>A</kbd><kbd>D</kbd> תנועה · <kbd>W</kbd> קפיצה כפולה · <kbd>F</kbd> <span id="basic-move-0"></span> · <kbd>G</kbd> <span id="charge-move-0"></span>';
   $("player-two-keys").innerHTML = session.mode === "cpu"
     ? "היריב נשלט על ידי המחשב"
     : '<kbd>←</kbd><kbd>→</kbd> תנועה · <kbd>↑</kbd> קפיצה כפולה · <kbd>K</kbd> <span id="basic-move-1"></span> · <kbd>L</kbd> <span id="charge-move-1"></span>';
+  $("basic-move-0").textContent = game.fighters[0].basicLabel;
+  $("charge-move-0").textContent = game.fighters[0].chargeLabel;
   if (session.mode === "local") {
     $("basic-move-1").textContent = game.fighters[1].basicLabel;
     $("charge-move-1").textContent = game.fighters[1].chargeLabel;
@@ -324,7 +400,9 @@ function updateCharacterUI() {
     `ברואליציה. ${game.fighters[0].name} מול ${game.fighters[1].name}. ` +
     (session.touchEnabled
       ? "כפתורי המגע שולטים בתנועה, קפיצה כפולה, מכה ומכת טעינה."
-      : "A ו-D לתנועה, W לקפיצה כפולה, F למכה, G למכת טעינה."),
+      : session.mode === "cpu"
+        ? "אפשר לשלוט עם A D W F G או עם החצים, K ו-L."
+        : "A ו-D לתנועה, W לקפיצה כפולה, F למכה, G למכת טעינה."),
   );
 }
 
@@ -336,13 +414,13 @@ function startFight() {
   renderer.words = [];
   updateCharacterUI();
   showScreen("arena");
-  syncUI(true);
-  canvas.focus({ preventScroll: true });
-  toast(session.touchEnabled
+  beginCountdown(session.touchEnabled
     ? "בקר המגע פעיל. את כפתור הברק מחזיקים ומשחררים."
     : session.mode === "cpu"
-      ? "המחשב נכנס לזירה. אל תתנו לו זמן לטעון."
+      ? "המחשב נכנס לזירה. אפשר לשחק גם עם החצים."
       : "שני שחקנים. מקלדת אחת. בלי תירוצים.");
+  syncUI(true);
+  canvas.focus({ preventScroll: true });
 }
 
 function startOrResume() {
@@ -353,6 +431,7 @@ function startOrResume() {
     cpu.reset();
     renderer.particles = [];
     renderer.words = [];
+    beginCountdown("סיבוב חדש. מוכנים?");
   }
   clearInput();
   canvas.focus({ preventScroll: true });
@@ -368,8 +447,8 @@ function restartRound() {
   renderer.particles = [];
   renderer.words = [];
   canvas.focus({ preventScroll: true });
+  beginCountdown("משחק חוזר. כל האחוזים נמחקו.");
   syncUI(true);
-  toast("משחק חוזר. כל האחוזים נמחקו.");
 }
 
 function pause() {
@@ -493,8 +572,10 @@ function syncUI(force = false) {
     $("play-button").focus({ preventScroll: true });
   } else if (game.state === "playing") {
     $("winner-sprite").hidden = true;
-    $("round-label").textContent = `סיבוב ${game.round} · הראשון שמועף מפסיד`;
-    $("round-status").textContent = "הסיבוב פעיל";
+    $("round-label").textContent = isCountdownActive()
+      ? `סיבוב ${game.round} · מתכוננים לקרב`
+      : `סיבוב ${game.round} · הראשון שמועף מפסיד`;
+    $("round-status").textContent = isCountdownActive() ? "הקרב מתחיל" : "הסיבוב פעיל";
   }
 }
 
@@ -533,9 +614,13 @@ function frame(timestamp) {
   lastTimestamp = timestamp;
   accumulator += frameTime;
   while (accumulator >= STEP) {
-    const secondInput = session.mode === "cpu" ? cpu.update(game, STEP) : fighterInput(1);
-    game.update(STEP, [fighterInput(0), secondInput]);
-    consumeQueuedInput();
+    if (isCountdownActive()) {
+      updateCountdown(STEP);
+    } else {
+      const secondInput = session.mode === "cpu" ? cpu.update(game, STEP) : fighterInput(1);
+      game.update(STEP, [fighterInput(0), secondInput]);
+      consumeQueuedInput();
+    }
     handleEvents();
     accumulator -= STEP;
   }
@@ -583,26 +668,31 @@ window.addEventListener("keydown", event => {
   }
   if (!GAME_KEYS.has(event.code)) return;
   event.preventDefault();
-  if (game.state !== "playing") return;
+  if (game.state !== "playing" || isCountdownActive()) return;
   const index = KEYMAP.findIndex(mapping => Object.values(mapping).includes(event.code));
-  if (session.mode === "cpu" && index === 1) return;
   const mapping = KEYMAP[index];
+  const targetIndex = targetFighterForMapping(index);
   if (!event.repeat && !heldKeys.has(event.code)) {
-    if (event.code === mapping.jump) queued[index].jumpPressed = true;
-    if (event.code === mapping.basic) queued[index].basicPressed = true;
+    if (event.code === mapping.jump) queued[targetIndex].jumpPressed = true;
+    if (event.code === mapping.basic) queued[targetIndex].basicPressed = true;
   }
   heldKeys.add(event.code);
 });
 
 window.addEventListener("keyup", event => {
   const index = KEYMAP.findIndex(mapping => mapping.charge === event.code);
-  if (index >= 0 && heldKeys.has(event.code) && game.state === "playing") queued[index].chargeReleased = true;
   heldKeys.delete(event.code);
+  if (index >= 0 && game.state === "playing" && !isCountdownActive()) {
+    const targetIndex = targetFighterForMapping(index);
+    const chargeStillHeld = mappingsForFighter(targetIndex)
+      .some(mapping => heldKeys.has(mapping.charge) || touchHeldKeys.has(mapping.charge));
+    if (!chargeStillHeld) queued[targetIndex].chargeReleased = true;
+  }
   if (GAME_KEYS.has(event.code)) event.preventDefault();
 });
 
 function pressTouchControl(event) {
-  if (!session.touchEnabled || session.screen !== "arena" || game.state !== "playing") return;
+  if (!session.touchEnabled || session.screen !== "arena" || game.state !== "playing" || isCountdownActive()) return;
   const button = event.currentTarget;
   const action = button.dataset.touchAction;
   const code = TOUCH_CODES[action];
@@ -624,7 +714,7 @@ function releaseTouchControl(event) {
   event.preventDefault();
   activeTouchPointers.delete(event.pointerId);
   if ([...activeTouchPointers.values()].includes(code)) return;
-  if (code === TOUCH_CODES.charge && touchHeldKeys.has(code) && game.state === "playing") {
+  if (code === TOUCH_CODES.charge && touchHeldKeys.has(code) && game.state === "playing" && !isCountdownActive()) {
     queued[0].chargeReleased = true;
   }
   touchHeldKeys.delete(code);
