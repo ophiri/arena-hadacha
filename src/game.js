@@ -10,6 +10,7 @@ export const session = {
   screen: "home",
   mode: "cpu",
   activeSlot: 0,
+  selectionStep: 0,
   touchEnabled: false,
 };
 
@@ -30,6 +31,10 @@ let renderer;
 let ready = false;
 let soundEnabled = false;
 let audioContext;
+const music = new Audio("assets/audio/8-bit-night-drive.mp3");
+music.loop = true;
+music.preload = "auto";
+music.volume = 0.28;
 let lastTimestamp = 0;
 let accumulator = 0;
 let toastTimer;
@@ -62,6 +67,12 @@ const spritePaths = {
   bennettBasic: "assets/fighters/bennett-basic.png",
   bennettCharge: "assets/fighters/bennett-charge.png",
   bennettProjectile: "assets/fighters/bennett-projectile.png",
+  mansourIdle: "assets/fighters/mansour-idle.png",
+  mansourRun: "assets/fighters/mansour-run.png",
+  mansourBasic: "assets/fighters/mansour-basic.png",
+  mansourCharge: "assets/fighters/mansour-charge.png",
+  mansourProjectile: "assets/fighters/mansour-projectile.png",
+  mansourVictory: "assets/fighters/mansour-victory.png",
 };
 const sprites = Object.fromEntries(Object.keys(spritePaths).map(name => [name, new Image()]));
 
@@ -262,12 +273,13 @@ function setGameSelections(selections) {
 function openCharacterSelect(mode) {
   session.mode = mode;
   session.activeSlot = 0;
+  session.selectionStep = 0;
   const playerOne = game.selections[0] || "bibi";
   const playerTwo = mode === "cpu" ? cpuOpponentFor(playerOne) : game.selections[1] || "ben-gvir";
   setGameSelections([playerOne, playerTwo]);
   showScreen("select");
   updateSelectionUI();
-  $("fight-button").focus({ preventScroll: true });
+  document.querySelector(".roster-card")?.focus({ preventScroll: true });
 }
 
 function returnHome() {
@@ -280,6 +292,7 @@ function returnHome() {
 function returnToSelection() {
   if (game.state !== "ready") game.reset("ready");
   session.activeSlot = 0;
+  session.selectionStep = 0;
   showScreen("select");
   updateCharacterUI();
   updateSelectionUI();
@@ -287,16 +300,22 @@ function returnToSelection() {
 
 function selectCharacter(characterId) {
   const selections = [...game.selections];
-  if (session.mode === "cpu") {
-    selections[0] = characterId;
-    selections[1] = cpuOpponentFor(characterId);
-    session.activeSlot = 0;
+  selections[session.activeSlot] = characterId;
+  if (session.activeSlot === 0) {
+    session.activeSlot = 1;
+    session.selectionStep = 1;
   } else {
-    selections[session.activeSlot] = characterId;
-    session.activeSlot = 1 - session.activeSlot;
+    session.selectionStep = 2;
   }
   setGameSelections(selections);
   playTone(460 + ROSTER.findIndex(character => character.id === characterId) * 55, 0.08, 0, "triangle", 0.025);
+}
+
+function editSelection(slot) {
+  session.activeSlot = slot;
+  session.selectionStep = slot;
+  updateSelectionUI();
+  document.querySelector(".roster-card")?.focus({ preventScroll: true });
 }
 
 function buildRoster() {
@@ -331,8 +350,10 @@ function updateSelectionUI() {
   game.fighters.forEach((fighter, slot) => {
     const panel = $(`selected-fighter-${slot}`);
     panel.style.setProperty("--fighter-color", fighter.color);
-    panel.classList.toggle("is-active", session.mode === "local" && session.activeSlot === slot);
-    panel.disabled = session.mode === "cpu" && slot === 1;
+    panel.classList.toggle("is-active", session.selectionStep < 2 && session.activeSlot === slot);
+    panel.classList.toggle("is-locked", session.selectionStep > slot);
+    panel.dataset.selectionState = session.selectionStep > slot ? "נעול" : session.activeSlot === slot ? "בוחרים עכשיו" : "ממתין";
+    panel.disabled = false;
     $(`selected-image-${slot}`).src = fighter.portrait;
     $(`selected-image-${slot}`).alt = fighter.name;
     $(`selected-name-${slot}`).textContent = fighter.name;
@@ -340,31 +361,37 @@ function updateSelectionUI() {
   });
 
   $("slot-label-0").textContent = "שחקן 1";
-  $("slot-label-1").textContent = session.mode === "cpu" ? "מחשב" : "שחקן 2";
-  $("select-mode-label").textContent = session.mode === "cpu"
-    ? `מול המחשב · היריב: ${game.fighters[1].shortName}`
-    : `קרב מקומי · עכשיו בוחר שחקן ${session.activeSlot + 1}`;
+  $("slot-label-1").textContent = session.mode === "cpu" ? "יריב מחשב" : "שחקן 2";
+  $("select-mode-label").textContent = session.selectionStep === 2
+    ? `${session.mode === "cpu" ? "מול המחשב" : "קרב מקומי"} · הלוחמים נעולים`
+    : session.activeSlot === 0
+      ? "קודם בוחרים את שחקן 1"
+      : session.mode === "cpu" ? "עכשיו בוחרים את יריב המחשב" : "עכשיו בוחרים את שחקן 2";
   $("mode-plate").textContent = session.mode === "cpu" ? "נגד המחשב" : "2 שחקנים";
   $("selection-callout").replaceChildren();
   const prompt = document.createElement("span");
-  prompt.textContent = session.mode === "cpu" ? "בחרו לוחם" : "עכשיו בוחר";
+  prompt.textContent = session.selectionStep === 2 ? "מוכנים" : "עכשיו בוחרים";
   const chooser = document.createElement("b");
-  chooser.textContent = session.mode === "cpu" ? "שחקן 1" : `שחקן ${session.activeSlot + 1}`;
+  chooser.textContent = session.selectionStep === 2
+    ? "לקרב!"
+    : session.activeSlot === 0 ? "שחקן 1" : session.mode === "cpu" ? "יריב מחשב" : "שחקן 2";
   $("selection-callout").append(prompt, chooser);
 
   for (const card of document.querySelectorAll(".roster-card")) {
     const selectedSlots = game.selections
-      .map((id, slot) => id === card.dataset.character ? slot : -1)
+      .map((id, slot) => session.selectionStep > slot && id === card.dataset.character ? slot : -1)
       .filter(slot => slot >= 0);
     card.classList.toggle("is-selected", selectedSlots.length > 0);
     card.dataset.selectedLabel = selectedSlots.map(slot =>
       slot === 0 ? "1P" : session.mode === "cpu" ? "CPU" : "2P").join(" + ");
   }
 
-  $("fight-button").disabled = !ready;
-  $("fight-button").textContent = ready
-    ? session.mode === "cpu" ? `לקרב נגד ${game.fighters[1].shortName}` : "לקרב!"
-    : "טוענים את הלוחמים…";
+  $("fight-button").disabled = !ready || session.selectionStep < 2;
+  $("fight-button").textContent = !ready
+    ? "טוענים את הלוחמים…"
+    : session.selectionStep < 2
+      ? "נועלים שני לוחמים"
+      : session.mode === "cpu" ? `לקרב נגד ${game.fighters[1].shortName}` : "לקרב!";
 }
 
 function updateCharacterUI() {
@@ -407,7 +434,7 @@ function updateCharacterUI() {
 }
 
 function startFight() {
-  if (!ready || session.screen !== "select") return;
+  if (!ready || session.screen !== "select" || session.selectionStep < 2) return;
   game.startRound();
   cpu.reset();
   renderer.particles = [];
@@ -498,22 +525,34 @@ function playTone(frequency, duration, delay = 0, type = "square", volume = 0.03
 
 async function toggleSound() {
   if (!soundEnabled) {
+    let effectsReady = false;
+    let musicReady = false;
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) throw new Error("Web Audio אינו נתמך.");
       audioContext ||= new AudioContextClass();
       await audioContext.resume();
-      soundEnabled = true;
+      effectsReady = true;
     } catch (error) {
-      console.error("Sound unavailable:", error);
+      console.warn("Sound effects unavailable:", error);
+    }
+    try {
+      await music.play();
+      musicReady = true;
+    } catch (error) {
+      console.warn("Background music unavailable:", error);
+    }
+    if (!effectsReady && !musicReady) {
       if (session.screen === "arena") toast("הצליל אינו זמין בדפדפן הזה. המשחק ממשיך כרגיל.");
       return;
     }
+    soundEnabled = true;
   } else {
     soundEnabled = false;
+    music.pause();
   }
   $("sound-button").setAttribute("aria-pressed", String(soundEnabled));
-  $("sound-button").setAttribute("aria-label", soundEnabled ? "השתקת צליל" : "הפעלת צליל");
+  $("sound-button").setAttribute("aria-label", soundEnabled ? "השתקת מוזיקה וצלילים" : "הפעלת מוזיקה וצלילים");
   $("sound-waves").setAttribute("d", soundEnabled ? "M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" : "m16 9 5 6m0-6-5 6");
   playTone(540, 0.12);
 }
@@ -557,11 +596,7 @@ function syncUI(force = false) {
   } else if (roundOver) {
     const playerWon = session.mode !== "cpu" || game.winner.slot === 0;
     $("winner-sprite").hidden = false;
-    $("winner-sprite").src = game.winner.id === "bibi"
-      ? "assets/fighters/bibi-victory.png"
-      : game.winner.id === "ben-gvir"
-        ? "assets/fighters/ben-gvir-victory.png"
-        : game.winner.portrait;
+    $("winner-sprite").src = game.winner.victory || game.winner.portrait;
     $("winner-sprite").alt = `${game.winner.name} בתנוחת ניצחון`;
     $("overlay-title").textContent = session.mode === "cpu" && !playerWon ? "המחשב ניצח" : `${game.winner.name} ניצח!`;
     $("overlay-description").textContent = `${game.loser.name} יצא מגבולות הזירה עם ${game.loser.damage}% נזק. אפשר להתחיל מיד משחק חוזר או להחליף לוחמים.`;
@@ -592,7 +627,8 @@ function handleEvents() {
     } else if (event.type === "projectileThrow") {
       const frequency = event.projectile === "bomb-diagram" ? 310
         : event.projectile === "objection" ? 390
-          : event.projectile === "speech-bubble" ? 445 : 260;
+          : event.projectile === "speech-bubble" ? 445
+            : event.projectile === "smoke-ring" ? 205 : 260;
       playTone(frequency, 0.12, 0, "sawtooth", 0.035);
     } else if (event.type === "chargeStart") {
       playTone(185, 0.08, 0, "sawtooth", 0.018);
@@ -732,7 +768,12 @@ window.addEventListener("blur", () => {
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && session.screen === "arena" && game.state === "playing") game.pause();
-  if (document.hidden) clearInput();
+  if (document.hidden) {
+    clearInput();
+    music.pause();
+  } else if (soundEnabled) {
+    music.play().catch(error => console.warn("Background music could not resume:", error));
+  }
   lastTimestamp = 0;
   accumulator = 0;
   syncUI(true);
@@ -744,13 +785,10 @@ $("local-mode-button").addEventListener("click", () => openCharacterSelect("loca
 $("select-back-button").addEventListener("click", returnHome);
 $("home-button").addEventListener("click", returnHome);
 $("selected-fighter-0").addEventListener("click", () => {
-  session.activeSlot = 0;
-  updateSelectionUI();
+  editSelection(0);
 });
 $("selected-fighter-1").addEventListener("click", () => {
-  if (session.mode !== "local") return;
-  session.activeSlot = 1;
-  updateSelectionUI();
+  editSelection(1);
 });
 $("fight-button").addEventListener("click", startFight);
 $("play-button").addEventListener("click", startOrResume);

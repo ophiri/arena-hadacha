@@ -36,8 +36,8 @@ test("the arena contains one main ring and two readable upper platforms", () => 
   assert.ok(ARENA.platforms.every(platform => platform.x > WORLD.blast.left));
 });
 
-test("the selectable roster contains four complete original fighters", () => {
-  assert.deepEqual(ROSTER.map(character => character.id), ["bibi", "ben-gvir", "gotliv", "bennett"]);
+test("the selectable roster contains five complete original fighters", () => {
+  assert.deepEqual(ROSTER.map(character => character.id), ["bibi", "ben-gvir", "gotliv", "bennett", "mansour"]);
   assert.ok(ROSTER.every(character =>
     character.name && character.shortName && character.projectileKind &&
     character.basicLabel && character.chargeLabel && character.portrait));
@@ -145,6 +145,11 @@ test("basic attacks throw distinct fighter projectiles", () => {
   advance(game, 0.14, [{ basicPressed: true }, { basicPressed: true }]);
   assert.deepEqual(new Set(game.projectiles.map(projectile => projectile.kind)),
     new Set(["bomb-diagram", "pita"]));
+
+  const mansour = new Game(["mansour", "bennett"]);
+  mansour.startRound();
+  advance(mansour, 0.14, [{ basicPressed: true }, {}]);
+  assert.deepEqual(mansour.projectiles.map(projectile => projectile.kind), ["smoke-ring"]);
   assert.ok(game.drainEvents().filter(event => event.type === "projectileThrow").length === 2);
 });
 

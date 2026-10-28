@@ -21,12 +21,14 @@ An original satirical Israeli political arena fighter presented as a fictional f
 ## Capabilities and Constraints
 
 - One original arena.
-- Four selectable satirical fighters: בנימין נתניהו, איתמר בן גביר, טלי גוטליב, and נפתלי בנט.
+- Five selectable satirical fighters: בנימין נתניהו, איתמר בן גביר, טלי גוטליב, נפתלי בנט, and מנסור עבאס.
 - Ben Gvir uses a supplied full sprite set for idle, running, pita, kick, crocodile, and victory animation.
 - Bibi uses a supplied full sprite set for idle, running, bomb diagram, champagne, and victory animation.
+- Mansour uses a supplied full sprite set for idle, running, hookah smoke, flag attack, and victory animation.
 - Single-player against a deterministic computer controller.
 - Local two-player on one keyboard, including mirror matches.
 - Optional on-screen controls for touch devices, with held movement and charge input.
+- User-supplied looping 8-bit background music controlled by the shared sound toggle.
 - Every fighter has horizontal movement, a double jump, a unique basic projectile, and a held charge attack capped at 1.5 seconds.
 - Attacks deal damage and knockback; accumulated damage increases later knockback.
 - A round ends on a ring-out and supports rematch, roster change, or return to the main menu.
@@ -42,6 +44,8 @@ The experience is clearly fictional satire. Preserve the bold dark arcade palett
 
 - Repository-owned Bibi and Ben Gvir artwork.
 - User-supplied sprite sheets for Tally Gotliv and Naftali Bennett.
+- User-supplied full sprite sheet for Mansour Abbas.
+- User-supplied `8-Bit Night Drive` music track.
 - User-supplied Kahane-hand reference processed into a transparent game asset.
 - Existing deterministic JavaScript engine, Node tests, and Playwright browser tests.
 

@@ -19,7 +19,7 @@
       THESIS: A satirical fight-night broadcast becomes a complete game flow, refusing the website-like arena card.
       OWN-WORLD: Stadium black, scoreboard cream, hazard yellow, corner cyan, torn broadcast bars, and oversized fighter cutouts.
       STORY: Enter the broadcast, choose solo or local play, lock two fighters, fight, and rematch or return to the roster.
-      FIRST VIEWPORT: A full-screen title lockup and vertical mode menu sit over a four-fighter lineup already under arena lights.
+      FIRST VIEWPORT: A full-screen title lockup and vertical mode menu sit over a five-fighter lineup already under arena lights.
       FORM: Experience mode; fight-night jumbotron world, cold-open staging, grounded direction three, seed 3a120fac.
     -->
     <div class="game-shell" id="app-shell">
@@ -35,7 +35,7 @@
           <button class="icon-button input-mode-button" id="input-mode-button" type="button" aria-label="בחירת אמצעי שליטה" title="מקלדת או מגע">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a4 4 0 0 1 3.7 5.5l-1.3 3.2a2 2 0 0 1-3.2.8L14.5 16h-5l-1.7 1.5a2 2 0 0 1-3.2-.8l-1.3-3.2A4 4 0 0 1 7 8Z"/><path d="M8 11v4m-2-2h4m6-1h.01M18 14h.01"/></svg>
           </button>
-          <button class="icon-button" id="sound-button" type="button" aria-label="הפעלת צליל" aria-pressed="false" title="צליל (M)">
+          <button class="icon-button" id="sound-button" type="button" aria-label="הפעלת מוזיקה וצלילים" aria-pressed="false" title="מוזיקה וצלילים (M)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="sound-waves" d="m16 9 5 6m0-6-5 6"/></svg>
           </button>
           <button class="icon-button" id="fullscreen-button" type="button" aria-label="מסך מלא" title="מסך מלא">
@@ -70,17 +70,25 @@
             <figure class="lineup-fighter lineup-ben-gvir"><img src="assets/fighters/ben-gvir-portrait.png" alt=""><span>בן גביר</span></figure>
             <figure class="lineup-fighter lineup-gotliv"><img src="assets/fighters/gotliv-idle.png" alt=""><span>גוטליב</span></figure>
             <figure class="lineup-fighter lineup-bennett"><img src="assets/fighters/bennett-idle.png" alt=""><span>בנט</span></figure>
+            <figure class="lineup-fighter lineup-mansour"><img src="assets/fighters/mansour-portrait.png" alt=""><span>עבאס</span></figure>
           </div>
 
           <p class="parody-note">פארודיה בדיונית ועצמאית · לא תשדיר בחירות · אין קשר לאדם או למפלגה המוצגים</p>
         </section>
 
+        <!--
+          THESIS: בחירת הדמויות היא רגע כניסה לזירה, לא טופס עם כרטיסים.
+          OWN-WORLD: לוחות שידור כהים, פורטרטים פיקסליים צפופים, צהוב 1P וציאן 2P.
+          STORY: נועלים קודם את שחקן 1, אחריו את היריב, ורק אז הקרב נפתח.
+          FIRST VIEWPORT: שני לוחמים גדולים מעל שורת הסגל המלאה, עם VS והכרזה במרכז.
+          FORM: fighter-select arcade board בתוך שפת השידור הקיימת; בקשה מפורשת, ללא העתקת ממשק מסחרי.
+        -->
         <section class="game-screen select-screen" id="select-screen" aria-labelledby="select-title" hidden>
           <div class="select-heading">
             <button class="back-button" id="select-back-button" type="button">→ חזרה</button>
             <div>
-              <h1 id="select-title">בחרו לוחמים</h1>
-              <p id="select-mode-label">קרב מקומי · שחקן 1 בוחר</p>
+              <h1 id="select-title">בחרו את הלוחמים</h1>
+              <p id="select-mode-label">קודם בוחרים את שחקן 1</p>
             </div>
             <span class="mode-plate" id="mode-plate">2 שחקנים</span>
           </div>
@@ -107,7 +115,7 @@
           </div>
 
           <div class="select-footer">
-            <p><kbd>A</kbd><kbd>D</kbd><kbd>W</kbd> לשחקן 1 · <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd> לשחקן 2</p>
+            <p>נועלים קודם <b>1P</b>, אחר כך <b>2P / CPU</b> · אפשר ללחוץ על לוחם נעול כדי לבחור מחדש</p>
             <button class="fight-button" id="fight-button" type="button" disabled>טוענים את הלוחמים…</button>
           </div>
         </section>
@@ -223,7 +231,7 @@
       <h2 id="help-title">איך נשארים בזירה?</h2>
       <div class="help-grid">
         <p><b>בוחרים מצב</b><span>אפשר לשחק מול המחשב או בקרב מקומי לשני שחקנים על אותה מקלדת.</span></p>
-        <p><b>בוחרים לוחם</b><span>נתניהו, בן גביר, גוטליב ובנט זמינים בכל מצב. גם קרב מראה אפשרי בקרב מקומי.</span></p>
+        <p><b>בוחרים לוחמים</b><span>כל חמשת הלוחמים מוצגים יחד. נועלים קודם את שחקן 1, אחר כך את שחקן 2 או יריב המחשב.</span></p>
         <p><b>זזים וקופצים</b><span>לכל לוחם קפיצה מהקרקע ועוד קפיצה אחת באוויר. מול המחשב אפשר להשתמש ב־WASD או בחצים.</span></p>
         <p><b>תוקפים</b><span>המכה הבסיסית מהירה. את מכת הטעינה מחזיקים עד 1.5 שניות ומשחררים בעיתוי הנכון.</span></p>
         <p><b>מנצחים</b><span>נזק גבוה מגדיל את ההדיפה. רק יציאה מגבולות הזירה קובעת רינג־אאוט.</span></p>

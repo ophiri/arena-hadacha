@@ -24,6 +24,11 @@ FILES = [
     "assets/fighters/gotliv-charge.png", "assets/fighters/gotliv-projectile.png",
     "assets/fighters/bennett-idle.png", "assets/fighters/bennett-basic.png",
     "assets/fighters/bennett-charge.png", "assets/fighters/bennett-projectile.png",
+    "assets/fighters/mansour-portrait.png", "assets/fighters/mansour-idle.png",
+    "assets/fighters/mansour-run.png", "assets/fighters/mansour-basic.png",
+    "assets/fighters/mansour-charge.png", "assets/fighters/mansour-projectile.png",
+    "assets/fighters/mansour-victory.png",
+    "assets/audio/8-bit-night-drive.mp3",
 ]
 
 

@@ -27,6 +27,7 @@ export const ROSTER = [
     basicLabel: "תרשים פצצה",
     chargeLabel: "מתקפת שמפניה",
     portrait: "assets/fighters/bibi-portrait.png",
+    victory: "assets/fighters/bibi-victory.png",
   },
   {
     id: "ben-gvir",
@@ -38,6 +39,7 @@ export const ROSTER = [
     basicLabel: "מתקפת פיתה",
     chargeLabel: "בעיטת תנין",
     portrait: "assets/fighters/ben-gvir-portrait.png",
+    victory: "assets/fighters/ben-gvir-victory.png",
   },
   {
     id: "gotliv",
@@ -60,6 +62,18 @@ export const ROSTER = [
     basicLabel: "קורא: אחים שלי!",
     chargeLabel: "בעיטת הייטק",
     portrait: "assets/fighters/bennett-idle.png",
+  },
+  {
+    id: "mansour",
+    name: "מנסור עבאס",
+    shortName: "עבאס",
+    color: "#9ae07d",
+    accent: "#ff6868",
+    projectileKind: "smoke-ring",
+    basicLabel: "טבעת עשן",
+    chargeLabel: "סיבוב דגל",
+    portrait: "assets/fighters/mansour-portrait.png",
+    victory: "assets/fighters/mansour-victory.png",
   },
 ];
 
@@ -280,7 +294,7 @@ export class Game {
       w: 46,
       h: 46,
       vx: direction * ATTACKS.basic.projectileSpeed,
-      vy: kind === "bomb-diagram" ? -34 : ["objection", "speech-bubble", "pita"].includes(kind) ? -48 : -14,
+      vy: kind === "bomb-diagram" ? -34 : ["objection", "speech-bubble", "pita", "smoke-ring"].includes(kind) ? -48 : -14,
       direction,
       age: 0,
       life: 1.65,

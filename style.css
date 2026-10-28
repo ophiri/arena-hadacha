@@ -291,7 +291,7 @@ button svg {
 .lineup-fighter {
   position: absolute;
   bottom: 13%;
-  width: 28%;
+  width: 24%;
   height: 72%;
   margin: 0;
   display: flex;
@@ -330,11 +330,12 @@ button svg {
   font-weight: 900;
   transform: rotate(-3deg);
 }
-.lineup-bibi { left: 0; --fighter-color: var(--yellow); transform: scale(1.13); }
-.lineup-ben-gvir { left: 23%; --fighter-color: var(--cyan); transform: scale(0.98); }
-.lineup-gotliv { left: 48%; --fighter-color: var(--pink); transform: scale(1.05); }
-.lineup-bennett { left: 72%; --fighter-color: var(--green); transform: scale(1.04); }
-.lineup-bibi img, .lineup-gotliv img, .lineup-bennett img { image-rendering: pixelated; }
+.lineup-bibi { left: -2%; --fighter-color: var(--yellow); transform: scale(1.08); }
+.lineup-ben-gvir { left: 18%; --fighter-color: var(--cyan); transform: scale(0.94); }
+.lineup-gotliv { left: 38%; --fighter-color: var(--pink); transform: scale(1.01); }
+.lineup-bennett { left: 58%; --fighter-color: var(--green); transform: scale(1); }
+.lineup-mansour { left: 78%; --fighter-color: #9ae07d; transform: scale(0.98); }
+.lineup-bibi img, .lineup-gotliv img, .lineup-bennett img, .lineup-mansour img { image-rendering: pixelated; }
 .parody-note {
   position: absolute;
   right: 50%;
@@ -347,10 +348,13 @@ button svg {
 }
 
 .select-screen {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: auto;
-  padding: 28px clamp(24px, 4vw, 62px) 24px;
+  padding: 22px clamp(24px, 4vw, 62px) 20px;
   overflow-y: auto;
+  background:
+    linear-gradient(90deg, transparent 49.85%, #66718d55 50%, transparent 50.15%),
+    radial-gradient(circle at 50% 35%, #313955 0, #11162a 40%, transparent 67%);
 }
 .select-heading {
   min-height: 72px;
@@ -393,24 +397,54 @@ button svg {
 }
 
 .versus-preview {
-  height: clamp(220px, 34vh, 350px);
+  position: relative;
+  height: clamp(280px, 43vh, 430px);
+  max-width: 1180px;
   display: grid;
-  grid-template-columns: 1fr 92px 1fr;
+  grid-template-columns: 1fr 106px 1fr;
   align-items: stretch;
-  margin-top: 18px;
+  margin: 12px auto 0;
   direction: ltr;
+}
+.versus-preview::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  right: 4%;
+  bottom: 0;
+  left: 4%;
+  height: 14px;
+  background: repeating-linear-gradient(-45deg, var(--orange) 0 14px, #151a2d 14px 28px);
+  box-shadow: 0 8px 0 #02040b;
+  pointer-events: none;
 }
 .selected-fighter {
   position: relative;
   min-width: 0;
   overflow: hidden;
-  border: 2px solid color-mix(in srgb, var(--fighter-color, var(--yellow)) 72%, var(--paper));
+  border: 1px solid #68728f;
+  border-bottom: 6px solid var(--fighter-color, var(--yellow));
   color: var(--paper);
   background:
-    linear-gradient(145deg, color-mix(in srgb, var(--fighter-color, var(--yellow)) 22%, transparent), transparent 54%),
-    #11172bcf;
+    linear-gradient(145deg, color-mix(in srgb, var(--fighter-color, var(--yellow)) 30%, transparent), transparent 50%),
+    repeating-linear-gradient(90deg, transparent 0 48px, #ffffff08 48px 49px),
+    #0c1122e8;
   box-shadow: 0 9px 0 #03050c, 0 24px 60px #0006;
   clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
+}
+.selected-fighter::before {
+  content: attr(data-selection-state);
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  left: 50%;
+  padding: 5px 9px;
+  color: var(--paper);
+  background: #070a16d9;
+  box-shadow: 3px 3px 0 #000;
+  font-size: 8px;
+  font-weight: 900;
+  transform: translateX(-50%);
 }
 .selected-fighter::after {
   content: "";
@@ -423,17 +457,19 @@ button svg {
   border-color: var(--fighter-color, var(--yellow));
   animation: active-corner 0.85s steps(2) infinite;
 }
+.selected-fighter.is-locked .corner-label::after { content: " ✓"; }
+.selected-fighter.is-locked { background-color: color-mix(in srgb, var(--fighter-color) 12%, #0c1122); }
 .selected-fighter img {
   position: absolute;
-  right: 12%;
-  bottom: 42px;
-  width: 76%;
-  height: 82%;
+  right: 4%;
+  bottom: 38px;
+  width: 92%;
+  height: 90%;
   object-fit: contain;
   image-rendering: pixelated;
   filter: drop-shadow(8px 10px 0 #03050c) drop-shadow(-2px -2px 0 #fff0c7);
 }
-.selected-fighter-two img { right: auto; left: 12%; transform: scaleX(-1); }
+.selected-fighter-two img { right: auto; left: 4%; transform: scaleX(-1); }
 .corner-label {
   position: absolute;
   z-index: 2;
@@ -452,13 +488,13 @@ button svg {
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 10px 16px 12px;
+  padding: 9px 16px 11px;
   border-top: 1px solid color-mix(in srgb, var(--fighter-color, var(--yellow)) 50%, #68718c);
   background: #0d1122eb;
   direction: rtl;
   text-align: right;
 }
-.selected-copy b { display: block; font-size: clamp(15px, 2vw, 24px); }
+.selected-copy b { display: block; font-size: clamp(17px, 2.1vw, 26px); }
 .selected-copy small { display: block; margin-top: 3px; color: #b9c3df; font-size: 9px; }
 .selected-fighter-two .selected-copy { text-align: left; }
 .versus-signal {
@@ -480,15 +516,15 @@ button svg {
 }
 .versus-signal b {
   display: grid;
-  width: 72px;
-  height: 72px;
+  width: 82px;
+  height: 82px;
   place-items: center;
   border: 3px solid var(--paper);
   border-radius: 50%;
   color: var(--night);
   background: var(--orange);
   box-shadow: 0 6px 0 #02040b;
-  font-size: 24px;
+  font-size: 27px;
   transform: rotate(-8deg);
 }
 .versus-signal span {
@@ -501,8 +537,9 @@ button svg {
 
 .roster-zone {
   position: relative;
-  margin-top: 22px;
-  padding-top: 19px;
+  width: min(900px, 100%);
+  margin: 18px auto 0;
+  padding-top: 17px;
   border-top: 1px solid #536080;
 }
 .selection-callout {
@@ -521,28 +558,33 @@ button svg {
 .selection-callout b { font-size: 11px; }
 .roster-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
   direction: rtl;
 }
 .roster-card {
   position: relative;
-  min-height: 132px;
+  min-height: 0;
+  aspect-ratio: 1 / 1.04;
   overflow: hidden;
   border: 1px solid #65708d;
   color: var(--paper);
   background: #151b31;
   box-shadow: 0 5px 0 #03050c;
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
-  text-align: right;
+  padding: 0;
+  text-align: center;
   transition: transform 0.14s ease-out, background 0.14s ease-out;
 }
 .roster-card:hover,
 .roster-card:focus-visible {
   background: #242d4d;
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02);
 }
-.roster-card.is-selected { border-color: var(--fighter-color); }
+.roster-card.is-selected {
+  border-color: var(--fighter-color);
+  box-shadow: 0 0 0 3px var(--fighter-color), 0 7px 0 #03050c;
+}
 .roster-card.is-selected::after {
   content: attr(data-selected-label);
   position: absolute;
@@ -556,31 +598,37 @@ button svg {
 }
 .roster-card img {
   position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 46%;
-  height: calc(100% - 12px);
+  top: 2px;
+  left: 4%;
+  width: 92%;
+  height: calc(100% - 35px);
   object-fit: contain;
   image-rendering: pixelated;
   filter: drop-shadow(4px 5px 0 #02040b);
 }
 .roster-card-copy {
   position: absolute;
-  right: 12px;
-  bottom: 14px;
-  width: 50%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  min-height: 36px;
+  padding: 7px 4px 5px;
+  border-top: 1px solid #64708f;
+  background: #0a0e1de8;
 }
-.roster-card-copy b { display: block; font-size: 15px; line-height: 1.05; }
-.roster-card-copy small { display: block; margin-top: 7px; color: var(--fighter-color); font-size: 8px; line-height: 1.35; }
+.roster-card-copy b { display: block; font-size: 12px; line-height: 1.05; }
+.roster-card-copy small { display: none; }
 
 .select-footer {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 18px;
-  margin-top: 20px;
+  width: min(900px, 100%);
+  margin: 14px auto 0;
 }
-.select-footer p { margin: 0; color: #9ca7ca; font-size: 8px; }
+.select-footer p { margin: 0; color: #b6c0dd; font-size: 8px; line-height: 1.6; }
 .fight-button {
   min-width: 220px;
   min-height: 52px;
@@ -1024,14 +1072,14 @@ dialog form { margin: 0; }
     padding-inline: 34px;
   }
   .fighter-lineup { min-height: 440px; }
-  .lineup-fighter { width: 31%; }
-  .lineup-bibi { left: -3%; }
-  .lineup-ben-gvir { left: 21%; }
-  .lineup-gotliv { left: 47%; }
-  .lineup-bennett { left: 70%; }
+  .lineup-fighter { width: 26%; }
+  .lineup-bibi { left: -7%; }
+  .lineup-ben-gvir { left: 13%; }
+  .lineup-gotliv { left: 34%; }
+  .lineup-bennett { left: 55%; }
+  .lineup-mansour { left: 76%; }
   .selected-fighter img { width: 85%; right: 8%; }
   .selected-fighter-two img { right: auto; left: 8%; }
-  .roster-card { min-height: 116px; }
   .roster-card-copy b { font-size: 12px; }
   .controls-ribbon { grid-template-columns: 1fr 150px 1fr; }
   .control-set p { white-space: normal; line-height: 1.7; }
@@ -1082,7 +1130,7 @@ dialog form { margin: 0; }
   .back-button { font-size: 8px; }
   .mode-plate { padding: 8px 6px; font-size: 8px; }
   .versus-preview {
-    height: 230px;
+    height: 260px;
     grid-template-columns: 1fr 48px 1fr;
     margin-top: 12px;
   }
@@ -1095,8 +1143,12 @@ dialog form { margin: 0; }
   .selected-fighter-two .corner-label { right: auto; left: 8px; }
   .versus-signal b { width: 43px; height: 43px; font-size: 14px; }
   .versus-signal span { display: none; }
-  .roster-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
-  .roster-card { min-height: 112px; }
+  .roster-zone { margin-top: 14px; padding-top: 15px; }
+  .roster-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+  .roster-card { min-height: 0; aspect-ratio: 0.82 / 1; }
+  .roster-card-copy { min-height: 27px; padding: 5px 1px 4px; }
+  .roster-card-copy b { font-size: 7px; }
+  .roster-card.is-selected::after { top: 3px; left: 3px; padding: 2px 4px; font-size: 6px; }
   .select-footer { grid-template-columns: 1fr; text-align: center; }
   .select-footer p { order: 2; }
   .fight-button { width: 100%; min-width: 0; }
@@ -1197,8 +1249,8 @@ dialog form { margin: 0; }
   .menu-action { min-height: 54px; }
   .fighter-lineup { height: 90vh; min-height: 0; }
   .select-screen { padding-block: 10px; }
-  .versus-preview { height: 43vh; }
-  .roster-card { min-height: 88px; }
+  .versus-preview { height: 45vh; }
+  .roster-card { min-height: 0; }
   .select-footer { margin-top: 10px; }
   .arena-screen { padding: 0; }
   .arena-toolbar { min-height: 44px; }

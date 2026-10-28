@@ -29,6 +29,8 @@ async function snapshot(page) {
 async function start(page, mode = "local") {
   await page.goto("/");
   await page.getByRole("button", { name: mode === "cpu" ? "מול המחשב" : "קרב מקומי" }).click();
+  await page.getByRole("button", { name: "בחירת בנימין נתניהו" }).click();
+  await page.getByRole("button", { name: "בחירת איתמר בן גביר" }).click();
   await page.locator("#fight-button").click();
   await expect(page.locator("#arena-screen")).toBeVisible();
   await expect(page.locator("#overlay")).toBeHidden();
@@ -79,6 +81,13 @@ test("Hebrew RTL game opens on a real main menu with both play modes and owned a
     ["assets/fighters/bennett-basic.png", 704, 150],
     ["assets/fighters/bennett-charge.png", 704, 150],
     ["assets/fighters/bennett-projectile.png", 144, 72],
+    ["assets/fighters/mansour-portrait.png", 112, 144],
+    ["assets/fighters/mansour-idle.png", 704, 150],
+    ["assets/fighters/mansour-run.png", 880, 150],
+    ["assets/fighters/mansour-basic.png", 704, 150],
+    ["assets/fighters/mansour-charge.png", 704, 150],
+    ["assets/fighters/mansour-projectile.png", 144, 72],
+    ["assets/fighters/mansour-victory.png", 176, 176],
   ]) {
     expect(await page.evaluate(async path => {
       const image = new Image();
@@ -87,27 +96,34 @@ test("Hebrew RTL game opens on a real main menu with both play modes and owned a
       return { width: image.naturalWidth, height: image.naturalHeight };
     }, path)).toEqual({ width, height });
   }
+  const music = await page.request.get("/assets/audio/8-bit-night-drive.mp3");
+  expect(music.status()).toBe(200);
+  expect(Number(music.headers()["content-length"])).toBeGreaterThan(1_000_000);
   expect(errors).toEqual([]);
 });
 
-test("character select shows four fighters and supports a Tally mirror match", async ({ page }) => {
+test("character select shows the full roster and locks player one before player two", async ({ page }) => {
   await page.clock.install();
   await page.goto("/");
   await page.getByRole("button", { name: "קרב מקומי" }).click();
-  await expect(page.locator(".roster-card")).toHaveCount(4);
-  await page.locator("#selected-fighter-0").click();
-  await page.getByRole("button", { name: "בחירת טלי גוטליב" }).click();
-  await page.getByRole("button", { name: "בחירת טלי גוטליב" }).click();
-  await expect(page.locator("#selected-name-0")).toHaveText("טלי גוטליב");
-  await expect(page.locator("#selected-name-1")).toHaveText("טלי גוטליב");
+  await expect(page.locator(".roster-card")).toHaveCount(5);
+  await expect(page.locator("#fight-button")).toBeDisabled();
+  await page.getByRole("button", { name: "בחירת מנסור עבאס" }).click();
+  await expect(page.locator("#selected-name-0")).toHaveText("מנסור עבאס");
+  await expect(page.locator("#selected-fighter-0")).toHaveClass(/is-locked/);
+  await expect(page.locator("#selected-fighter-1")).toHaveClass(/is-active/);
+  await expect(page.locator("#fight-button")).toBeDisabled();
+  await page.getByRole("button", { name: "בחירת מנסור עבאס" }).click();
+  await expect(page.locator("#selected-name-1")).toHaveText("מנסור עבאס");
+  await expect(page.locator("#fight-button")).toBeEnabled();
   await page.locator("#fight-button").click();
   await page.clock.runFor(3700);
   let state = await snapshot(page);
-  expect(state.fighters.map(fighter => fighter.id)).toEqual(["gotliv", "gotliv"]);
+  expect(state.fighters.map(fighter => fighter.id)).toEqual(["mansour", "mansour"]);
   await page.keyboard.press("f");
   await page.clock.runFor(220);
   state = await snapshot(page);
-  expect(state.projectiles).toContain("objection");
+  expect(state.projectiles).toContain("smoke-ring");
 });
 
 test("countdown freezes the fight and computer mode accepts arrows plus K/L", async ({ page }) => {
@@ -115,7 +131,8 @@ test("countdown freezes the fight and computer mode accepts arrows plus K/L", as
   await page.goto("/");
   await page.getByRole("button", { name: "מול המחשב" }).click();
   await page.getByRole("button", { name: "בחירת נפתלי בנט" }).click();
-  await expect(page.locator("#slot-label-1")).toHaveText("מחשב");
+  await page.getByRole("button", { name: "בחירת בנימין נתניהו" }).click();
+  await expect(page.locator("#slot-label-1")).toHaveText("יריב מחשב");
   await page.locator("#fight-button").click();
   const before = await snapshot(page);
   expect(before.mode).toBe("cpu");
@@ -280,6 +297,8 @@ test("release build works from a subdirectory without missing resources", async 
   await page.clock.install();
   await page.goto("/dist/");
   await page.getByRole("button", { name: "מול המחשב" }).click();
+  await page.getByRole("button", { name: "בחירת בנימין נתניהו" }).click();
+  await page.getByRole("button", { name: "בחירת איתמר בן גביר" }).click();
   await page.locator("#fight-button").click();
   await page.clock.runFor(3700);
   await page.keyboard.down("d");
@@ -294,6 +313,8 @@ test("mobile layout keeps menu, roster and fight controls inside the viewport", 
   await expect(page.getByRole("button", { name: "מול המחשב" })).toBeInViewport();
   await page.getByRole("button", { name: "קרב מקומי" }).click();
   await expect(page.locator(".roster-card").first()).toBeVisible();
+  await page.getByRole("button", { name: "בחירת בנימין נתניהו" }).click();
+  await page.getByRole("button", { name: "בחירת איתמר בן גביר" }).click();
   await page.locator("#fight-button").click();
   await expect(page.locator(".controls-ribbon")).toBeVisible();
   const mobileLayout = await page.evaluate(() => {
@@ -333,6 +354,8 @@ test("coarse pointer users can opt into held touch controls", async ({ page }) =
   await expect(page.getByRole("dialog", { name: "איך תרצו לשלוט?" })).toBeVisible();
   await page.getByRole("button", { name: "כפתורי מגע" }).click();
   await page.getByRole("button", { name: "קרב מקומי" }).click();
+  await page.getByRole("button", { name: "בחירת בנימין נתניהו" }).click();
+  await page.getByRole("button", { name: "בחירת איתמר בן גביר" }).click();
   await page.locator("#fight-button").click();
   await expect(page.locator("#touch-controls")).toBeVisible();
   await page.clock.runFor(3700);

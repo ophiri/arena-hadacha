@@ -14,6 +14,7 @@
     "assets:gotliv": "python3 tools/process_gotliv_sprites.py",
     "assets:ben-gvir": "python3 tools/process_ben_gvir_sprites.py",
     "assets:bennett": "python3 tools/process_bennett_sprites.py",
+    "assets:mansour": "python3 tools/process_mansour_sprites.py",
     "pretest:browser": "npm run build"
   },
   "devDependencies": {

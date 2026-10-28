@@ -45,6 +45,12 @@ export class Renderer {
         basic: sprites.bennettBasic,
         charge: sprites.bennettCharge,
       },
+      mansour: {
+        idle: sprites.mansourIdle,
+        run: sprites.mansourRun,
+        basic: sprites.mansourBasic,
+        charge: sprites.mansourCharge,
+      },
     };
     this.resize();
   }
@@ -312,7 +318,7 @@ export class Renderer {
     const spriteSet = this.attackSprites[fighter.id];
     if (attack) {
       const rules = ATTACKS[attack.kind];
-      const hasFourFrameCharge = ["bibi", "ben-gvir", "gotliv", "bennett"].includes(fighter.id) && attack.kind === "charge";
+      const hasFourFrameCharge = ["bibi", "ben-gvir", "gotliv", "bennett", "mansour"].includes(fighter.id) && attack.kind === "charge";
       const frame = attack.kind === "basic"
         ? attack.time < rules.activeStart * 0.48 ? 0
           : attack.time < rules.activeStart ? 1
@@ -330,12 +336,16 @@ export class Renderer {
         Math.min(frame, frameCount - 1) * 176, 0, 176, 150,
         -60, -142, 176, 150,
       );
-    } else if (charging && ["bibi", "ben-gvir", "gotliv", "bennett"].includes(fighter.id)) {
+    } else if (charging && ["bibi", "ben-gvir", "gotliv", "bennett", "mansour"].includes(fighter.id)) {
       const frame = chargeRatio < 0.34 ? 0 : chargeRatio < 0.76 ? 1 : 2;
       c.drawImage(spriteSet.charge, frame * 176, 0, 176, 150, -60, -142, 176, 150);
-    } else if (["bibi", "ben-gvir"].includes(fighter.id)) {
+    } else if (["bibi", "ben-gvir", "mansour"].includes(fighter.id)) {
       const running = fighter.grounded && Math.abs(fighter.vx) > 40;
-      const frameCount = fighter.id === "bibi" ? (running ? 4 : 5) : (running ? 6 : 4);
+      const frameCount = fighter.id === "bibi"
+        ? (running ? 4 : 5)
+        : fighter.id === "ben-gvir"
+          ? (running ? 6 : 4)
+          : (running ? 5 : 4);
       const frame = Math.floor(time * (running ? 10 : 4)) % frameCount;
       c.drawImage(
         running ? spriteSet.run : spriteSet.idle,
@@ -363,7 +373,7 @@ export class Renderer {
 
   projectile(projectile) {
     const c = this.ctx;
-    if (["bomb-diagram", "objection", "speech-bubble", "pita"].includes(projectile.kind)) {
+    if (["bomb-diagram", "objection", "speech-bubble", "pita", "smoke-ring"].includes(projectile.kind)) {
       const frame = Math.floor(projectile.age * 10) % 2;
       const sheet = projectile.kind === "bomb-diagram"
         ? this.sprites.bibiProjectile
@@ -371,7 +381,9 @@ export class Renderer {
           ? this.sprites.gotlivProjectile
           : projectile.kind === "pita"
             ? this.sprites.benGvirProjectile
-            : this.sprites.bennettProjectile;
+            : projectile.kind === "smoke-ring"
+              ? this.sprites.mansourProjectile
+              : this.sprites.bennettProjectile;
       c.save();
       c.translate(projectile.x + projectile.w / 2, projectile.y + projectile.h / 2);
       c.rotate(projectile.angle);

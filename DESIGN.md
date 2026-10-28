@@ -4,7 +4,7 @@
 
 `ברואליציה` is a fictional fight-night broadcast rendered as a complete arcade game shell. It rejects the previous website-like card and footer structure: the interface is now a sequence of full-screen game states—main menu, character select, fight, pause, and result.
 
-The memorable image is four oversized fighter cutouts standing on a hazard-striped broadcast platform while the title and mode menu own the opposite half of the screen.
+The memorable image is five oversized fighter cutouts standing on a hazard-striped broadcast platform while the title and mode menu own the opposite half of the screen.
 
 ## Color
 
@@ -31,8 +31,8 @@ Use `Tahoma, "Segoe UI", Arial, sans-serif`. Hebrew display copy is very heavy, 
 
 ## Screen Composition
 
-- **Main menu:** giant title and vertical mode menu opposite a four-fighter lineup already under arena lights.
-- **Character select:** two large opposing fighter previews above a four-card roster; the active chooser is explicit.
+- **Main menu:** giant title and vertical mode menu opposite a five-fighter lineup already under arena lights.
+- **Character select:** a dedicated arcade fight board with two large opposing fighter previews above the complete five-portrait roster. Player one locks first, then player two or the CPU opponent; the fight action remains disabled until both locks are explicit.
 - **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame. Every round opens with a centered `3 · 2 · 1 · קרב!` broadcast takeover while the simulation is frozen. In phone portrait, the HUD becomes a compact strip above the Canvas so it never covers gameplay.
 - **Touch fight:** the keyboard ribbon is replaced by three physical control banks—direction, jump, and attacks—without covering the arena.
 - **Pause/result:** an in-arena broadcast takeover with rematch, roster, and main-menu actions.
@@ -43,8 +43,9 @@ RTL governs copy and reading order. Physical left/right controls are never seman
 
 - The main menu uses one authored entrance: title resolves from a broadcast blur while the fighter lineup rises from behind the hazard barrier.
 - Gameplay uses short screen shake, impact flash, particles, comic hit words, charge orbit, and synthesized tones.
+- The supplied `8-Bit Night Drive` track provides the continuous arcade bed; the sound control owns both music and synthesized fight effects.
 - The round countdown uses four hard-cut, oversized scoreboard beats rather than a soft loading animation.
-- Character-specific strips drive Tally’s objection and hammer, Bennett’s shout and kick, Bibi’s animated bomb diagram and champagne spray, and Ben Gvir’s animated pita, kick, and crocodile sequence.
+- Character-specific strips drive Tally’s objection and hammer, Bennett’s shout and kick, Bibi’s animated bomb diagram and champagne spray, Ben Gvir’s animated pita, kick, and crocodile sequence, and Mansour’s smoke rings and flag spin.
 - Respect `prefers-reduced-motion` by removing entrance motion, shake, particle travel, and pulsing.
 
 ## Interaction States
