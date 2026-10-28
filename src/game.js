@@ -354,8 +354,16 @@ function updateSelectionUI() {
     panel.classList.toggle("is-locked", session.selectionStep > slot);
     panel.dataset.selectionState = session.selectionStep > slot ? "נעול" : session.activeSlot === slot ? "בוחרים עכשיו" : "ממתין";
     panel.disabled = false;
-    $(`selected-image-${slot}`).src = fighter.portrait;
-    $(`selected-image-${slot}`).alt = fighter.name;
+    const idleFrames = fighter.idleFrames || 1;
+    const sprite = $(`selected-sprite-${slot}`);
+    const image = $(`selected-image-${slot}`);
+    sprite.style.setProperty("--idle-frames", idleFrames);
+    sprite.style.setProperty("--idle-steps", Math.max(1, idleFrames - 1));
+    sprite.style.setProperty("--idle-end", `${-((idleFrames - 1) / idleFrames) * 100}%`);
+    sprite.style.setProperty("--idle-duration", `${Math.max(0.8, idleFrames * 0.22)}s`);
+    image.src = fighter.idle || fighter.portrait;
+    image.alt = fighter.name;
+    image.classList.toggle("has-frames", idleFrames > 1);
     $(`selected-name-${slot}`).textContent = fighter.name;
     $(`selected-move-${slot}`).textContent = `${fighter.basicLabel} · ${fighter.chargeLabel}`;
   });

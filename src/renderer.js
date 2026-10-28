@@ -353,7 +353,9 @@ export class Renderer {
         -60, -142, 176, 150,
       );
     } else {
-      const dimensions = { width: 87, height: 112 };
+      const dimensions = fighter.id === "bennett"
+        ? { width: 116, height: 149 }
+        : { width: 87, height: 112 };
       c.drawImage(spriteSet.idle, -dimensions.width / 2, -dimensions.height + 8, dimensions.width, dimensions.height);
     }
     c.restore();

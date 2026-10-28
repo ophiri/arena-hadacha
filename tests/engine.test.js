@@ -40,7 +40,8 @@ test("the selectable roster contains five complete original fighters", () => {
   assert.deepEqual(ROSTER.map(character => character.id), ["bibi", "ben-gvir", "gotliv", "bennett", "mansour"]);
   assert.ok(ROSTER.every(character =>
     character.name && character.shortName && character.projectileKind &&
-    character.basicLabel && character.chargeLabel && character.portrait));
+    character.basicLabel && character.chargeLabel && character.portrait &&
+    character.idle && character.idleFrames >= 1));
 });
 
 test("the computer controller approaches, jumps and attacks without player-two input", () => {

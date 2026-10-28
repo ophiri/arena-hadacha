@@ -32,7 +32,7 @@ Use `Tahoma, "Segoe UI", Arial, sans-serif`. Hebrew display copy is very heavy, 
 ## Screen Composition
 
 - **Main menu:** giant title and vertical mode menu opposite a five-fighter lineup already under arena lights.
-- **Character select:** a dedicated arcade fight board with two large opposing fighter previews above the complete five-portrait roster. Player one locks first, then player two or the CPU opponent; the fight action remains disabled until both locks are explicit.
+- **Character select:** a dedicated arcade fight board with two large opposing idle animations above the complete five-portrait roster. Player one locks first, then player two or the CPU opponent; the fight action remains disabled until both locks are explicit. Large fighter art uses deep cast shadows without a bright cutout outline.
 - **Fight:** toolbar, Canvas arena, mirrored HUD, and a compact controls ribbon form one console-like frame. Every round opens with a centered `3 · 2 · 1 · קרב!` broadcast takeover while the simulation is frozen. In phone portrait, the HUD becomes a compact strip above the Canvas so it never covers gameplay.
 - **Touch fight:** the keyboard ribbon is replaced by three physical control banks—direction, jump, and attacks—without covering the arena.
 - **Pause/result:** an in-arena broadcast takeover with rematch, roster, and main-menu actions.

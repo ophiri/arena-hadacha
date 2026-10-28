@@ -27,6 +27,8 @@ export const ROSTER = [
     basicLabel: "תרשים פצצה",
     chargeLabel: "מתקפת שמפניה",
     portrait: "assets/fighters/bibi-portrait.png",
+    idle: "assets/fighters/bibi-idle.png",
+    idleFrames: 5,
     victory: "assets/fighters/bibi-victory.png",
   },
   {
@@ -39,6 +41,8 @@ export const ROSTER = [
     basicLabel: "מתקפת פיתה",
     chargeLabel: "בעיטת תנין",
     portrait: "assets/fighters/ben-gvir-portrait.png",
+    idle: "assets/fighters/ben-gvir-idle.png",
+    idleFrames: 4,
     victory: "assets/fighters/ben-gvir-victory.png",
   },
   {
@@ -51,6 +55,8 @@ export const ROSTER = [
     basicLabel: "זורקת התנגדות!",
     chargeLabel: "פטיש סדר",
     portrait: "assets/fighters/gotliv-idle.png",
+    idle: "assets/fighters/gotliv-idle.png",
+    idleFrames: 1,
   },
   {
     id: "bennett",
@@ -62,6 +68,8 @@ export const ROSTER = [
     basicLabel: "קורא: אחים שלי!",
     chargeLabel: "בעיטת הייטק",
     portrait: "assets/fighters/bennett-idle.png",
+    idle: "assets/fighters/bennett-idle.png",
+    idleFrames: 1,
   },
   {
     id: "mansour",
@@ -73,6 +81,8 @@ export const ROSTER = [
     basicLabel: "טבעת עשן",
     chargeLabel: "סיבוב דגל",
     portrait: "assets/fighters/mansour-portrait.png",
+    idle: "assets/fighters/mansour-idle.png",
+    idleFrames: 4,
     victory: "assets/fighters/mansour-victory.png",
   },
 ];

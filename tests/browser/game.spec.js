@@ -110,6 +110,13 @@ test("character select shows the full roster and locks player one before player 
   await expect(page.locator("#fight-button")).toBeDisabled();
   await page.getByRole("button", { name: "בחירת מנסור עבאס" }).click();
   await expect(page.locator("#selected-name-0")).toHaveText("מנסור עבאס");
+  await expect(page.locator("#selected-image-0")).toHaveAttribute("src", "assets/fighters/mansour-idle.png");
+  const previewStyle = await page.locator("#selected-image-0").evaluate(element => ({
+    animationName: getComputedStyle(element).animationName,
+    filter: getComputedStyle(element).filter,
+  }));
+  expect(previewStyle.animationName).toContain("selected-preview-frames");
+  expect(previewStyle.filter).not.toContain("255, 240, 199");
   await expect(page.locator("#selected-fighter-0")).toHaveClass(/is-locked/);
   await expect(page.locator("#selected-fighter-1")).toHaveClass(/is-active/);
   await expect(page.locator("#fight-button")).toBeDisabled();
